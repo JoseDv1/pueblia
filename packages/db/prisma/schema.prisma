@@ -1,0 +1,474 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ------------------ # AUTH # ------------------
+model User {
+  id          String  @id @default(cuid())
+  email       String  @unique
+  password    String
+  name        String?
+  displayName String? @map("display_name")
+
+  // Metadata fields
+  isActive  Boolean   @default(true) @map("is_active")
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  addressId String?   @unique
+  Address   Address?  @relation(fields: [addressId], references: [id], name: "UserAddress")
+
+  emailVerified Boolean   @default(false) // Para verificación de email
+  lastLoginAt   DateTime? // Para analytics de usuarios
+
+  Session                SessionToken[]
+  TokenBlacklist         TokenBlacklist[]
+  PasswordReset          PasswordResetToken[]
+  EmailVerificationToken EmailVerificationToken[]
+  ChatParticipant        ChatParticipant[]        @relation("ChatParticipantUser")
+  ChatMessage            ChatMessage[]
+  Business               Business[]               @relation("BusinessOwner")
+  AdminsBusiness         Business[]               @relation("BusinessAdmins")
+  Notifications          Notification[]           @relation("UserNotifications")
+  Commissions            Commission[]             @relation("CommissionUser")
+
+  role      UserRole?  @default(USER)
+  Orders    Orders[]   @relation("UserOrders")
+  Reviews   Review[]   @relation("UserReviews")
+  Favorites Favorite[] @relation("UserFavorites")
+  Carts     Carts[]    @relation("UserCarts")
+
+  @@index([email], name: "idx_user_email")
+  @@index([name], name: "idx_user_name")
+  @@index([displayName], name: "idx_user_display_name")
+  @@index([isActive, createdAt], name: "idx_user_active_created")
+  @@index([role, isActive], name: "idx_user_role_active")
+  @@map("users")
+}
+
+model SessionToken {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  sessionToken String   @unique @map("session_token") // Refresh Token JWT
+  expiresAt    DateTime @map("expires_at") //@default(dbgenerated("now() + interval '30 days'"))
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId], name: "idx_session_user")
+  @@index([expiresAt], name: "idx_session_expires")
+  @@map("session_tokens")
+}
+
+model TokenBlacklist {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token") // Refresh Token JWT
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("token_blacklist")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("email_verification_tokens")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// ------------------ # METADATA # ------------------
+
+model Address {
+  id          String   @id @default(cuid())
+  street      String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  User     User[]     @relation("UserAddress")
+  Business Business[] @relation("BusinessAddress")
+
+  @@map("addresses")
+}
+
+// ------------------ # MESSAGES # ------------------
+
+model Notification {
+  id         String            @id @default(cuid())
+  title      String?
+  message    String
+  type       NotificationType? @default(GENERAL)
+  readStatus Boolean           @default(true) // true = unread, false = read
+
+  // Para notificaciones directas a usuario
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], name: "UserNotifications")
+
+  // Para notificaciones a negocios (llegan a todos los admins)
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], name: "BusinessNotifications")
+
+  // Metadata
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId], name: "idx_user_notifications")
+  @@index([businessId], name: "idx_business_notifications")
+  @@index([userId, createdAt], name: "idx_user_notifications_created")
+  @@index([businessId, createdAt], name: "idx_business_notifications_created")
+  @@index([type, createdAt], name: "idx_notification_type_created")
+  @@map("notifications")
+}
+
+enum NotificationType {
+  GENERAL
+  CHAT_MESSAGE
+  BUSINESS_UPDATE
+  SYSTEM_ALERT
+  PROMOTION
+}
+
+model Chat {
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now()) @map("created_at")
+  ChatParticipant ChatParticipant[]
+  ChatMessage     ChatMessage[]
+}
+
+model ChatParticipant {
+  id     String @id @default(cuid())
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id])
+
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], name: "ChatParticipantUser")
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], name: "ChatParticipantBusiness")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("chat_users")
+}
+
+model ChatMessage {
+  id     String @id @default(cuid())
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id])
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  content String
+  status  ChatMessageStatus @default(SENT)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([chatId, createdAt], name: "idx_chat_messages_chat_created")
+  @@index([userId, createdAt], name: "idx_chat_messages_user_created")
+  @@index([status, createdAt], name: "idx_chat_messages_status_created")
+  @@map("chat_messages")
+}
+
+enum ChatMessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+// ------------------ # Business # ------------------
+
+model Business {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  ownerId     String
+  owner       User   @relation(fields: [ownerId], references: [id], name: "BusinessOwner")
+  AdminsUsers User[] @relation("BusinessAdmins")
+
+  logo     String? @map("logo_url") // URL to the logo image
+  cover    String? @map("cover_url") // URL to the cover image
+  location String? @map("location_url") // URL to the business location on a map
+  website  String? @map("website_url") // URL to the business website
+  phone    String? // Phone number
+
+  // Metadata
+  Address            Address?          @relation(fields: [addressId], references: [id], name: "BusinessAddress")
+  isVerified         Boolean           @default(false) @map("is_verified")
+  addressId          String?           @unique
+  isActive           Boolean           @default(true) @map("is_active")
+  deletedAt          DateTime?         @map("deleted_at")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  businessCategoryId String?
+  BusinessCategory   BusinessCategory? @relation(fields: [businessCategoryId], references: [id], name: "BusinessCategory")
+  openingHours       Json? // Para horarios de atención
+  tags               String[] // Para categorización flexible
+
+  ChatParticipant ChatParticipant[] @relation("ChatParticipantBusiness")
+  Notifications   Notification[]    @relation("BusinessNotifications")
+  Commissions     Commission[]      @relation("BusinessCommissions")
+  Services        Services[]        @relation("BusinessServices")
+  Orders          Orders[]          @relation("BusinessOrders")
+  Review          Review[]          @relation("BusinessReviews")
+  Favorite        Favorite[]        @relation("BusinessFavorites")
+
+  @@index([openingHours], type: Gin, name: "idx_business_opening_hours")
+  @@index([tags], type: Gin, name: "idx_business_tags")
+  @@index([isActive, isVerified], name: "idx_business_active_verified")
+  @@index([businessCategoryId, isActive], name: "idx_business_category_active")
+  @@index([ownerId, isActive], name: "idx_business_owner_active")
+  @@index([name], name: "idx_business_name") // Para búsquedas por nombre
+  @@index([createdAt], name: "idx_business_created_at")
+  @@map("business")
+}
+
+model BusinessCategory {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  business  Business[] @relation("BusinessCategory")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@index([name], name: "idx_business_category_name") // Para búsquedas por nombre de categoría
+  @@map("business_categories")
+}
+
+model Commission {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], name: "BusinessCommissions")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], name: "CommissionUser")
+
+  serviceId String?
+  service   Services?        @relation(fields: [serviceId], references: [id], name: "CommissionService")
+  amount    Float            @default(0.0) // Commission amount
+  status    CommissionStatus @default(PENDING)
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@index([businessId, status], name: "idx_commission_business_status")
+  @@index([userId, status], name: "idx_commission_user_status")
+  @@index([status, createdAt], name: "idx_commission_status_created")
+  @@index([serviceId, status], name: "idx_commission_service_status")
+  @@map("commissions")
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+  CANCELED
+  REFUNDED
+}
+
+// ------------------ # Offers # ------------------
+
+// Services is a model representing services/products/bookings offered by businesses
+model Services {
+  id         String      @id @default(cuid())
+  name       String
+  content    String
+  price      Float
+  type       ServiceType @default(OTHER)
+  businessId String
+  business   Business    @relation(fields: [businessId], references: [id], name: "BusinessServices")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  isActive   Boolean     @default(true) @map("is_active")
+  deletedAt  DateTime?   @map("deleted_at")
+
+  // Metadata
+  Orders         Orders[]         @relation("ServiceOrders")
+  ServicesImages ServicesImages[] @relation("ServiceImages")
+  Review         Review[]         @relation("ServiceReviews")
+  Commission     Commission[]     @relation("CommissionService")
+  Favorite       Favorite[]       @relation("ServiceFavorites")
+  Carts          Carts[]          @relation("ServiceCarts")
+
+  @@index([businessId, isActive], name: "idx_service_business_active")
+  @@index([type, isActive], name: "idx_service_type_active")
+  @@index([price], name: "idx_service_price") // Para búsquedas por precio
+  @@index(fields: [name], name: "idx_service_name") // Para búsquedas por nombre
+  @@index([createdAt], name: "idx_service_created_at")
+  @@index([deletedAt], name: "idx_service_deleted_at") // Para soft deletes
+  @@map("services")
+}
+
+model ServicesImages {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Services @relation(fields: [serviceId], references: [id], name: "ServiceImages")
+  imageUrl  String   @map("image_url") // URL to the image
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("services_images")
+}
+
+enum ServiceType {
+  FOOD
+  HOTEL
+  TURISM
+  TRANSPORT
+  OTHER
+}
+
+model Orders {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], name: "UserOrders")
+  businessId String
+  business   Business  @relation(fields: [businessId], references: [id], name: "BusinessOrders")
+  serviceId  String?
+  service    Services? @relation(fields: [serviceId], references: [id], name: "ServiceOrders")
+
+  status          OrderStatus   @default(PENDING)
+  totalPrice      Float         @default(0.0) // Total price of the order
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  deliveryAt      DateTime?     @map("delivery_at") // Optional delivery time
+  deliveryAddress String?       @map("delivery_address") // Optional delivery address
+  paymentMethod   PaymentMethod @default(CASH) @map("payment_method")
+  paymentPlatform String?       @map("payment_platform") // Optional payment platform (e.g., Stripe, PayPal, etc.)
+
+  @@index([userId, status], name: "idx_order_user_status")
+  @@index([businessId, status], name: "idx_order_business_status")
+  @@index([status, createdAt], name: "idx_order_status_created")
+  @@index([userId, createdAt], name: "idx_order_user_created")
+  @@index([businessId, createdAt], name: "idx_order_business_created")
+  @@index([deliveryAt], name: "idx_order_delivery_at")
+  @@map("orders")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  OTHER
+  CASH
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELED
+  BOOKED
+  REFUNDED
+  IN_PROGRESS
+}
+
+// ------------------ # Reviews # ------------------
+model Review {
+  id         String     @id @default(cuid())
+  userId     String
+  rating     Int        @default(1) // 1-5 star rating
+  comment    String?
+  reviewType ReviewType @default(BUSINESS) @map("review_type")
+  isActive   Boolean    @default(true) @map("is_active")
+  deletedAt  DateTime?  @map("deleted_at")
+  reactions  Reaction   @default(NONE)
+
+  // For business reviews
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], name: "BusinessReviews")
+
+  // For service reviews  
+  serviceId String?
+  service   Services? @relation(fields: [serviceId], references: [id], name: "ServiceReviews")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User     @relation(fields: [userId], references: [id], name: "UserReviews")
+
+  @@index([businessId, rating], name: "idx_review_business_rating")
+  @@index([serviceId, rating], name: "idx_review_service_rating")
+  @@index([userId, createdAt], name: "idx_review_user_created")
+  @@index([rating, createdAt], name: "idx_review_rating_created")
+  @@index([isActive, createdAt], name: "idx_review_active_created")
+  @@index([reviewType, rating], name: "idx_review_type_rating")
+  @@map("reviews")
+}
+
+enum ReviewType {
+  BUSINESS
+  SERVICE
+}
+
+enum Reaction {
+  NONE
+  LIKE
+  DISLIKE
+  LOVE
+  YUMMY
+  WOW
+  SAD
+  ANGRY
+}
+
+// ------------------ # User Data # ------------------
+
+model Favorite {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], name: "UserFavorites")
+
+  // For business favorites
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], name: "BusinessFavorites")
+
+  // For service favorites
+  serviceId String?
+  service   Services? @relation(fields: [serviceId], references: [id], name: "ServiceFavorites")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("favorites")
+}
+
+model Carts {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], name: "UserCarts")
+  serviceId String
+  service   Services @relation(fields: [serviceId], references: [id], name: "ServiceCarts")
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, serviceId], name: "unique_user_service_cart")
+  @@index([userId, createdAt], name: "idx_cart_user_created")
+  @@index([serviceId], name: "idx_cart_service")
+  @@map("carts")
+}
