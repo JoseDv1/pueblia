@@ -1,0 +1,20 @@
+{
+  "name": "web",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/alpinejs": "^0.4.8",
+    "@astrojs/svelte": "^7.1.0",
+    "@types/alpinejs": "^3.13.11",
+    "alpinejs": "^3.14.9",
+    "astro": "^5.9.3",
+    "svelte": "^5.34.1",
+    "typescript": "^5.8.3"
+  }
+}
