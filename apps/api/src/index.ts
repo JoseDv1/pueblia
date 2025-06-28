@@ -1,9 +1,7 @@
-import { Hono } from 'hono'
+import { PORT } from "@/config"
+import { server } from "@/server"
 
-const app = new Hono()
-
-app.get('/', (c) => {
-	return c.text('Hello Hono!')
+Bun.serve({
+	fetch: server.fetch,
+	port: PORT,
 })
-
-export default app
