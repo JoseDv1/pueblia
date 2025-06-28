@@ -5,13 +5,14 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/client"
 }
 
 // ------------------ # AUTH # ------------------
 model User {
   id          String  @id @default(cuid())
   email       String  @unique
-  password    String
+  password    String? // Optional for OAuth users
   name        String?
   displayName String? @map("display_name")
 
@@ -26,6 +27,9 @@ model User {
   emailVerified Boolean   @default(false) // Para verificación de email
   lastLoginAt   DateTime? // Para analytics de usuarios
 
+  // OAuth fields
+  image String? // Profile image from OAuth provider
+
   // Para el sistema de fidelidad
   loyaltyPoints Int @default(0) // Puntos de fidelidad del usuario
 
@@ -34,6 +38,7 @@ model User {
   TokenBlacklist         TokenBlacklist[]
   PasswordReset          PasswordResetToken[]
   EmailVerificationToken EmailVerificationToken[]
+  Account                Account[] // OAuth accounts
   ChatParticipant        ChatParticipant[]        @relation("ChatParticipantUser")
   ChatMessage            ChatMessage[]
   Business               Business[]               @relation("BusinessOwner")
@@ -52,6 +57,8 @@ model User {
   @@index([displayName], name: "idx_user_display_name")
   @@index([isActive, createdAt], name: "idx_user_active_created")
   @@index([role, isActive], name: "idx_user_role_active")
+  @@index([emailVerified], name: "idx_user_email_verified")
+  @@index([lastLoginAt], name: "idx_user_last_login")
   @@map("users")
 }
 
@@ -77,6 +84,8 @@ model TokenBlacklist {
   user         User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now()) @map("created_at")
 
+  @@index([userId])
+  @@index([createdAt])
   @@map("token_blacklist")
 }
 
@@ -88,6 +97,8 @@ model PasswordResetToken {
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@index([userId])
+  @@index([expiresAt])
   @@map("password_reset_tokens")
 }
 
@@ -99,7 +110,43 @@ model EmailVerificationToken {
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@index([userId])
+  @@index([expiresAt])
   @@map("email_verification_tokens")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String // "oauth" | "email" | "credentials"
+  provider          String // "google" | "facebook" | "twitter" | "github" | etc.
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier String   @id // Email or phone number
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 enum UserRole {
