@@ -11,24 +11,22 @@
 	--secondary-light: light-dark(hsl(30, var(--saturation), var(--saturation)), hsl(30, var(--saturation), 30%));
 	--secondary-dark: light-dark(hsl(30, var(--saturation), 50%), hsl(30, var(--saturation), 20%));
 
-
 	/* Accent colors */
 	--success: light-dark(hsl(120, var(--saturation), 60%), hsl(120, var(--saturation), 40%));
 	--warning: light-dark(hsl(40, var(--saturation), 60%), hsl(40, var(--saturation), 40%));
 	--error: light-dark(hsl(0, var(--saturation), 60%), hsl(0, var(--saturation), 40%));
 	--neutral: light-dark(hsl(0, 0%, 80%), hsl(0, 0%, 20%));
 
-
 	/* Accent shades */
 	--success-light: light-dark(hsl(120, var(--saturation), 80%), hsl(120, var(--saturation), 20%));
-	--success-dark: light-dark(hsl(120, var(--saturation), 50%), hsl(120, var(--saturation), 30%));
 	--warning-light: light-dark(hsl(40, var(--saturation), 80%), hsl(40, var(--saturation), 20%));
-	--warning-dark: light-dark(hsl(40, var(--saturation), 50%), hsl(40, var(--saturation), 30%));
 	--error-light: light-dark(hsl(0, var(--saturation), 80%), hsl(0, var(--saturation), 20%));
-	--error-dark: light-dark(hsl(0, var(--saturation), 50%), hsl(0, var(--saturation), 30%));
 	--neutral-light: light-dark(hsl(0, 0%, 90%), hsl(0, 0%, 10%));
-	--neutral-dark: light-dark(hsl(0, 0%, var(--saturation)), hsl(0, 0%, 30%));
 
+	--success-dark: light-dark(hsl(120, var(--saturation), 50%), hsl(120, var(--saturation), 30%));
+	--warning-dark: light-dark(hsl(40, var(--saturation), 50%), hsl(40, var(--saturation), 30%));
+	--error-dark: light-dark(hsl(0, var(--saturation), 50%), hsl(0, var(--saturation), 30%));
+	--neutral-dark: light-dark(hsl(0, 0%, var(--saturation)), hsl(0, 0%, 30%));
 
 	/* Neutral colors for background */
 	--background-color: light-dark(hsl(0, 0%, 90%), hsl(0, 0%, 20%));
@@ -37,7 +35,7 @@
 
 	/* Text colors */
 	--text-color: light-dark(hsl(0, 0%, 10%), hsl(0, 0%, 90%));
-	--text-muted: light-dark(hsl(0, 0%, 30%), hsl(0, 0%, var(--saturation)));
+	--text-muted: light-dark(hsl(0, 0%, 30%), hsl(0, 0%, 70%));
 	--text-disabled: light-dark(hsl(0, 0%, 50%), hsl(0, 0%, 50%));
 
 	/* Border colors */
