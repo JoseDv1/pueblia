@@ -44,4 +44,6 @@
 	/* Shadows */
 	--shadow-color: light-dark(hsla(0, 0%, 0%, 0.1), hsla(0, 0%, 0%, 0.3));
 
+	/* Vars */
+	--border-radius: 16px;
 }
