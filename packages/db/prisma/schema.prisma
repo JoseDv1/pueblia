@@ -26,6 +26,10 @@ model User {
   emailVerified Boolean   @default(false) // Para verificación de email
   lastLoginAt   DateTime? // Para analytics de usuarios
 
+  // Para el sistema de fidelidad
+  loyaltyPoints Int @default(0) // Puntos de fidelidad del usuario
+
+  // Relaciones
   Session                SessionToken[]
   TokenBlacklist         TokenBlacklist[]
   PasswordReset          PasswordResetToken[]
@@ -214,11 +218,12 @@ model Business {
   owner       User   @relation(fields: [ownerId], references: [id], name: "BusinessOwner")
   AdminsUsers User[] @relation("BusinessAdmins")
 
-  logo     String? @map("logo_url") // URL to the logo image
-  cover    String? @map("cover_url") // URL to the cover image
-  location String? @map("location_url") // URL to the business location on a map
-  website  String? @map("website_url") // URL to the business website
-  phone    String? // Phone number
+  logo          String? @map("logo_url") // URL to the logo image
+  cover         String? @map("cover_url") // URL to the cover image
+  location      String? @map("location_url") // URL to the business location on a map
+  website       String? @map("website_url") // URL to the business website
+  phone         String? // Phone number
+  loyaltyPoints Int     @default(0) // Puntos de fidelidad del negocio
 
   // Metadata
   Address            Address?          @relation(fields: [addressId], references: [id], name: "BusinessAddress")
@@ -231,6 +236,7 @@ model Business {
   businessCategoryId String?
   BusinessCategory   BusinessCategory? @relation(fields: [businessCategoryId], references: [id], name: "BusinessCategory")
   openingHours       Json? // Para horarios de atención
+  isOpen             Boolean           @default(false) @map("is_open") // Para saber si está abierto actualmente
   tags               String[] // Para categorización flexible
 
   ChatParticipant ChatParticipant[] @relation("ChatParticipantBusiness")
@@ -353,6 +359,7 @@ model Orders {
   business   Business  @relation(fields: [businessId], references: [id], name: "BusinessOrders")
   serviceId  String?
   service    Services? @relation(fields: [serviceId], references: [id], name: "ServiceOrders")
+  note       String? // Optional note for the order
 
   status          OrderStatus   @default(PENDING)
   totalPrice      Float         @default(0.0) // Total price of the order
@@ -384,8 +391,9 @@ enum OrderStatus {
   CONFIRMED
   COMPLETED
   CANCELED
-  BOOKED
   REFUNDED
+
+  BOOKED
   IN_PROGRESS
 }
 
