@@ -1,0 +1,71 @@
+---
+import StepsGrid, { type Step } from "../molecules/StepsGrid.astro";
+
+// Pasos específicos de "Cómo funciona"
+const howItWorksSteps: Step[] = [
+	{
+		number: 1,
+		icon: "🔍",
+		title: "Explora",
+		description: "Filtra por categoría o busca cerca de ti",
+	},
+	{
+		number: 2,
+		icon: "💬",
+		title: "Conecta",
+		description: "Chatea o reserva en segundos",
+	},
+	{
+		number: 3,
+		icon: "⭐",
+		title: "Disfruta",
+		description: "Gana puntos y comparte tu experiencia",
+	},
+];
+---
+
+<section class="how-it-works">
+	<div class="container">
+		<h2 class="section-title">Cómo funciona</h2>
+		<p class="section-subtitle">Tres pasos simples para comenzar</p>
+
+		<StepsGrid steps={howItWorksSteps} />
+	</div>
+</section>
+
+<style>
+	.how-it-works {
+		padding: var(--spacing-xxxxl) 0;
+		background: var(--background-color);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		position: relative;
+		z-index: 1;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		font-weight: 800;
+		text-align: center;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-lg);
+		position: relative;
+	}
+
+	.section-subtitle {
+		font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+		text-align: center;
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-xxl);
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+		line-height: 1.6;
+	}
+</style>

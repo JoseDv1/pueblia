@@ -8,24 +8,28 @@ const benefits: Benefit[] = [
 		title: "Clientes llegan directo a tu local",
 		description: "Geolocalización y notificaciones push en el momento exacto",
 		stat: "50% de ventas provienen de ofertas cerca de mí",
+		color: "secondary",
 	},
 	{
 		icon: "💬",
 		title: "Chat directo cliente-negocio",
 		description: "Convierte dudas en pedidos al instante",
 		stat: "Meta ≥ 15% de conversión",
+		color: "secondary",
 	},
 	{
 		icon: "🎯",
 		title: "Comisiones bajas (3%)",
 		description: "Plan Pueblia Plus con tarifas competitivas",
 		stat: "Ahorro vs. OTAs de hasta 12%",
+		color: "secondary",
 	},
 	{
 		icon: "📊",
 		title: "Dashboard sencillo",
 		description: "Analíticas claras y % de perfil completado",
 		stat: "Más visibilidad = perfil completo",
+		color: "secondary",
 	},
 ];
 ---
@@ -75,18 +79,6 @@ const benefits: Benefit[] = [
 		color: var(--text-color);
 		margin-bottom: var(--spacing-lg);
 		position: relative;
-	}
-
-	.section-title::after {
-		content: "";
-		position: absolute;
-		bottom: -var(--spacing-sm);
-		left: 50%;
-		transform: translateX(-50%);
-		width: 80px;
-		height: 4px;
-		background: linear-gradient(90deg, var(--primary), var(--secondary));
-		border-radius: 2px;
 	}
 
 	.section-subtitle {

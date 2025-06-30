@@ -6,6 +6,7 @@ export interface Benefit {
 	title: string;
 	description: string;
 	stat: string;
+	color?: "primary" | "secondary";
 }
 
 interface Props {
@@ -23,6 +24,7 @@ const { benefits } = Astro.props;
 				title={benefit.title}
 				description={benefit.description}
 				stat={benefit.stat}
+				color={benefit.color || "primary"}
 			/>
 		))
 	}

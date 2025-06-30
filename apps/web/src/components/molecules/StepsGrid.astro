@@ -1,0 +1,60 @@
+---
+import StepCard from "../atoms/StepCard.astro";
+
+export interface Step {
+	number: number;
+	icon: string;
+	title: string;
+	description: string;
+}
+
+interface Props {
+	steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="steps-grid">
+	{
+		steps.map((step) => (
+			<StepCard
+				number={step.number}
+				icon={step.icon}
+				title={step.title}
+				description={step.description}
+			/>
+		))
+	}
+</div>
+
+<style>
+	.steps-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xxl);
+		position: relative;
+	}
+
+	/* Conectores visuales entre pasos en pantallas grandes */
+	@media (min-width: 768px) {
+		.steps-grid::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 15%;
+			right: 15%;
+			height: 2px;
+			background: linear-gradient(
+				90deg,
+				transparent 0%,
+				var(--border-color) 25%,
+				var(--border-color) 75%,
+				transparent 100%
+			);
+			z-index: 0;
+			transform: translateY(-50%);
+		}
+	}
+</style>

@@ -1,0 +1,120 @@
+---
+import LinkButton from "../atoms/LinkButton.astro";
+import BenefitGrid, { type Benefit } from "../molecules/BenefitGrid.astro";
+
+// Beneficios específicos para la audiencia B2C (turistas y residentes)
+const b2cBenefits: Benefit[] = [
+	{
+		icon: "🗺️",
+		title: "Explora como local",
+		description: "Mapa interactivo, cupones de bienvenida y rankings semanales",
+		stat: "Descubre lugares únicos",
+	},
+	{
+		icon: "🎮",
+		title: "Gamificación & recompensas",
+		description: "Puntos por cada compra y retos locales divertidos",
+		stat: "Gana premios reales",
+	},
+	{
+		icon: "🌍",
+		title: "Soporte trilingüe",
+		description: "ES-EN-PT ideal para viajeros internacionales",
+		stat: "Comunicación sin barreras",
+	},
+];
+---
+
+<section class="benefits-b2c" id="users">
+	<div class="container">
+		<h2 class="section-title">Para turistas y residentes</h2>
+		<p class="section-subtitle">Vive el pueblo como un insider</p>
+
+		<BenefitGrid benefits={b2cBenefits} />
+
+		<div class="cta-center">
+			<LinkButton href="/download" variant="primary">
+				📱 Descarga la app (próximamente)
+			</LinkButton>
+		</div>
+	</div>
+
+	<style>
+		.benefits-b2c {
+			padding: var(--spacing-xxxxl) 0;
+			background: linear-gradient(
+				135deg,
+				var(--primary-light) 0%,
+				var(--middle-color) 100%
+			);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 var(--spacing-lg);
+			position: relative;
+			z-index: 1;
+		}
+
+		.section-title {
+			font-size: clamp(2rem, 4vw, 3.5rem);
+			font-weight: 800;
+			text-align: center;
+			color: var(--text-color);
+			margin-bottom: var(--spacing-lg);
+			position: relative;
+		}
+
+		.section-subtitle {
+			font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+			text-align: center;
+			color: var(--text-muted);
+			margin-bottom: var(--spacing-xxl);
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+			line-height: 1.6;
+		}
+
+		.cta-center {
+			display: flex;
+			justify-content: center;
+			text-align: center;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: var(--spacing-sm);
+			font-size: 1.1rem;
+			font-weight: 600;
+			padding: var(--spacing-lg) var(--spacing-xl);
+			border: none;
+			border-radius: var(--border-radius);
+			cursor: pointer;
+			transition: all var(--transition-duration) ease;
+			text-decoration: none;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.btn-secondary {
+			background-color: var(--primary);
+			color: var(--top-color);
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+		}
+
+		.btn-secondary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			background-color: var(--primary-dark);
+		}
+
+		.btn-secondary:active {
+			transform: translateY(0);
+		}
+	</style>
+</section>

@@ -2,6 +2,8 @@
 import Hero from "@/components/organism/Hero.astro";
 import Layout from "@/layouts/Layout.astro";
 import B2BSection from "@/components/organism/B2BSection.astro";
+import B2CSection from "@/components/organism/B2CSection.astro";
+import HowItWorksSection from "@/components/organism/HowItWorksSection.astro";
 ---
 
 <Layout title="Pueblia - Descubre y potencia lo mejor de Guatapé">
@@ -11,66 +13,10 @@ import B2BSection from "@/components/organism/B2BSection.astro";
 	<B2BSection />
 
 	<!-- Beneficios B2C -->
-	<section class="benefits-b2c" id="users">
-		<div class="container">
-			<h2 class="section-title">Para turistas y residentes</h2>
-			<p class="section-subtitle">Vive el pueblo como un insider</p>
-
-			<div class="b2c-features">
-				<div class="feature-card">
-					<h3>🗺️ Explora como local</h3>
-					<p>Mapa interactivo, cupones de bienvenida y rankings semanales</p>
-				</div>
-
-				<div class="feature-card">
-					<h3>🎮 Gamificación & recompensas</h3>
-					<p>Puntos por cada compra y retos locales divertidos</p>
-				</div>
-
-				<div class="feature-card">
-					<h3>🌍 Soporte trilingüe</h3>
-					<p>ES-EN-PT ideal para viajeros internacionales</p>
-				</div>
-			</div>
-
-			<div class="cta-center">
-				<button class="btn btn-secondary"
-					>📱 Descarga la app (próximamente)</button
-				>
-			</div>
-		</div>
-	</section>
+	<B2CSection />
 
 	<!-- Cómo funciona -->
-	<section class="how-it-works">
-		<div class="container">
-			<h2 class="section-title">Cómo funciona</h2>
-			<p class="section-subtitle">Tres pasos simples para comenzar</p>
-
-			<div class="steps-grid">
-				<div class="step-card">
-					<div class="step-number">1</div>
-					<div class="step-icon">🔍</div>
-					<h3>Explora</h3>
-					<p>Filtra por categoría o busca cerca de ti</p>
-				</div>
-
-				<div class="step-card">
-					<div class="step-number">2</div>
-					<div class="step-icon">💬</div>
-					<h3>Conecta</h3>
-					<p>Chatea o reserva en segundos</p>
-				</div>
-
-				<div class="step-card">
-					<div class="step-number">3</div>
-					<div class="step-icon">⭐</div>
-					<h3>Disfruta</h3>
-					<p>Gana puntos y comparte tu experiencia</p>
-				</div>
-			</div>
-		</div>
-	</section>
+	<HowItWorksSection />
 
 	<!-- Testimonios -->
 	<section class="testimonials">
