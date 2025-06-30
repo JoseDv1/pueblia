@@ -40,3 +40,31 @@ applyTo: "**"
 | `--spacing-xxl`         | 48 px                | —                    | Espaciado 2× XL                                            |
 | `--spacing-xxxl`        | 64 px                | —                    | Espaciado 3× XL                                            |
 | `--spacing-xxxxl`       | 96 px                | —                    | Espaciado 4× XL                                            |
+
+Siempre usa los tokens de color y espaciado definidos en esta tabla para mantener la consistencia en el diseño. Los tokens están diseñados para adaptarse a ambos temas (claro y oscuro) y deben ser utilizados en todo el proyecto.
+
+## Uso de Tokens
+
+Los tokens deben ser utilizados en CSS, JavaScript y cualquier otro lugar donde se necesiten valores de color o espaciado. Por ejemplo:
+
+```css
+.button {
+	background-color: var(--primary);
+	color: var(--text-color);
+	padding: var(--spacing-md);
+	border-radius: var(--border-radius);
+	transition: background-color var(--transition-duration);
+}
+```
+
+Todas las aniamciones deben ser definidas en el archivo `animations.css` y deben ser referenciadas por su nombre en los componentes. Por ejemplo:
+
+```css
+@keyframes float {
+	0%, 100% {
+		transform: translateY(0px)
+	}
+	50% {
+		transform: translateY(-20px)
+	}
+```

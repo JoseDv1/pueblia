@@ -7,13 +7,13 @@
 	--saturation: 70%;
 
 	--primary: light-dark(hsl(200, var(--saturation), 70%), hsl(200, var(--saturation), 30%));
-	--secondary: light-dark(hsl(30, var(--saturation), 60%), hsl(30, var(--saturation), 40%));
+	--secondary: light-dark(hsl(30, var(--saturation), 70%), hsl(30, var(--saturation), 40%));
 
 	/* Shades */
 	--primary-light: light-dark(hsl(200, var(--saturation), 80%), hsl(200, var(--saturation), 20%));
 	--primary-dark: light-dark(hsl(200, var(--saturation), 60%), hsl(200, var(--saturation), 40%));
-	--secondary-light: light-dark(hsl(30, var(--saturation), var(--saturation)), hsl(30, var(--saturation), 30%));
-	--secondary-dark: light-dark(hsl(30, var(--saturation), 50%), hsl(30, var(--saturation), 20%));
+	--secondary-light: light-dark(hsl(20, var(--saturation), 70%), hsl(30, var(--saturation), 30%));
+	--secondary-dark: light-dark(hsl(20, var(--saturation), 50%), hsl(30, var(--saturation), 20%));
 
 	/* Accent colors */
 	--success: light-dark(hsl(120, var(--saturation), 60%), hsl(120, var(--saturation), 40%));
@@ -73,6 +73,8 @@ html,
 body {
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	background-color: var(--middle-color);
+
+	scroll-behavior: smooth;
 }
 
 /* Utility Classes */
@@ -82,6 +84,11 @@ body {
 
 .absolute {
 	position: absolute;
+}
+
+.shine {
+	position: relative;
+	overflow: hidden;
 }
 
 .shine::before {
