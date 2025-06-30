@@ -55,7 +55,7 @@ This is a Bun-based monorepo with the following architecture:
 - Use Svelte components for interactive features
 - Use Alpine.js for simple reactive behaviors
 - Use GSAP for complex animations
-- Use Tailwind for styling with utility classes
+- Use CSS for styling, following the design tokens defined below
 
 ---
 
@@ -77,3 +77,11 @@ This is a Bun-based monorepo with the following architecture:
 - Web only: `bun run dev:web` or `bun run build:web`
 
 When suggesting code changes, always consider the full-stack context and ensure API/frontend integration works properly.
+
+# Atomic Design Principles
+
+This project follows Atomic Design principles for component structure:
+
+- **Atoms**: Basic building blocks (buttons, inputs, icons)
+- **Molecules**: Combinations of atoms (form groups, card headers)
+- **Organisms**: Complex components (navigation bars, footers)

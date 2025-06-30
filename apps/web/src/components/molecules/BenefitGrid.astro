@@ -1,0 +1,38 @@
+---
+import BenefitCard from "./BenefitCard.astro";
+
+export interface Benefit {
+	icon: string;
+	title: string;
+	description: string;
+	stat: string;
+}
+
+interface Props {
+	benefits: Benefit[];
+}
+
+const { benefits } = Astro.props;
+---
+
+<div class="benefits-grid">
+	{
+		benefits.map((benefit) => (
+			<BenefitCard
+				icon={benefit.icon}
+				title={benefit.title}
+				description={benefit.description}
+				stat={benefit.stat}
+			/>
+		))
+	}
+</div>
+
+<style>
+	.benefits-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xxl);
+	}
+</style>
