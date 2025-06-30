@@ -1,0 +1,55 @@
+---
+import FooterSection, {
+	type SocialLinkData,
+	type FooterLinkData,
+} from "./FooterSection.astro";
+
+export interface FooterSectionData {
+	title: string;
+	description?: string;
+	socialLinks?: SocialLinkData[];
+	links?: FooterLinkData[];
+	contactInfo?: string[];
+}
+
+interface Props {
+	sections: FooterSectionData[];
+}
+
+const { sections } = Astro.props;
+---
+
+<div class="footer-content">
+	{
+		sections.map((section) => (
+			<FooterSection
+				title={section.title}
+				description={section.description}
+				socialLinks={section.socialLinks}
+				links={section.links}
+				contactInfo={section.contactInfo}
+			/>
+		))
+	}
+</div>
+
+<style>
+	.footer-content {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xxl);
+	}
+
+	@media (min-width: 768px) {
+		.footer-content {
+			grid-template-columns: 2fr 1fr 1fr;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.footer-content {
+			grid-template-columns: 3fr 2fr 2fr;
+		}
+	}
+</style>

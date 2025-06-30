@@ -1,0 +1,26 @@
+---
+interface Props {
+	text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<div class="footer-bottom">
+	<p>{text}</p>
+</div>
+
+<style>
+	.footer-bottom {
+		border-top: 1px solid var(--border-color);
+		padding-top: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.footer-bottom p {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		margin: 0;
+		opacity: 0.8;
+	}
+</style>

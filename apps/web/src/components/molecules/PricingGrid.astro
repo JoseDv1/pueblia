@@ -1,0 +1,67 @@
+---
+import PricingCard from "../atoms/PricingCard.astro";
+
+export interface PricingPlan {
+	title: string;
+	price: string;
+	period?: string;
+	description: string;
+	features: string[];
+	buttonText: string;
+	buttonStyle: "primary" | "secondary" | "neutral";
+	featured?: boolean;
+	badge?: string;
+}
+
+interface Props {
+	plans: PricingPlan[];
+	note?: string;
+}
+
+const { plans, note } = Astro.props;
+---
+
+<div class="pricing-grid">
+	{
+		plans.map((plan) => (
+			<PricingCard
+				title={plan.title}
+				price={plan.price}
+				period={plan.period}
+				description={plan.description}
+				features={plan.features}
+				buttonText={plan.buttonText}
+				buttonStyle={plan.buttonStyle}
+				featured={plan.featured}
+				badge={plan.badge}
+			/>
+		))
+	}
+</div>
+
+{note && <p class="pricing-note">{note}</p>}
+
+<style>
+	.pricing-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xxl);
+		align-items: start;
+	}
+
+	.pricing-note {
+		text-align: center;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		font-style: italic;
+		margin-top: var(--spacing-xxxxl);
+	}
+
+	/* Ajuste especial para la tarjeta destacada */
+	@media (min-width: 768px) {
+		.pricing-grid {
+			align-items: center;
+		}
+	}
+</style>

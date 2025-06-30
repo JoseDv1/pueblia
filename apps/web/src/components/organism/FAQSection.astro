@@ -1,0 +1,60 @@
+---
+import FAQList, { type FAQ } from "../molecules/FAQList.astro";
+
+// Preguntas frecuentes definidas
+const frequentlyAskedQuestions: FAQ[] = [
+	{
+		question: "¿Qué necesito para registrarme?",
+		answer:
+			"Solo necesitas tu documento de identidad, información básica de tu negocio y una foto del local. El proceso toma menos de 5 minutos.",
+	},
+	{
+		question: "¿Cómo se calcula la comisión?",
+		answer:
+			"Cobramos una comisión del 3% únicamente cuando procesamos el pago a través de la app. Si usas tu propio medio de pago, no hay comisión.",
+	},
+	{
+		question: "¿Puedo usar mi propio medio de pago?",
+		answer:
+			"¡Por supuesto! Puedes seguir usando tu datafono, efectivo o transferencias. Pueblia solo facilita la conexión con clientes.",
+	},
+	{
+		question: "¿La app funciona offline?",
+		answer:
+			"La información básica y los contactos guardados funcionan offline. Para actualizaciones en tiempo real necesitas conexión a internet.",
+	},
+];
+---
+
+<section class="faq">
+	<div class="container">
+		<h2 class="section-title">Preguntas frecuentes</h2>
+
+		<FAQList faqs={frequentlyAskedQuestions} />
+	</div>
+</section>
+
+<style>
+	.faq {
+		padding: var(--spacing-xxxxl) 0;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		position: relative;
+		z-index: 1;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		font-weight: 800;
+		text-align: center;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-xxl);
+		position: relative;
+	}
+</style>

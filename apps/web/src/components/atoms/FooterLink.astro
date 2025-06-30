@@ -1,0 +1,28 @@
+---
+interface Props {
+	href: string;
+	text: string;
+}
+
+const { href, text } = Astro.props;
+---
+
+<a href={href} class="footer-link">
+	{text}
+</a>
+
+<style>
+	.footer-link {
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: all var(--transition-duration) ease;
+		font-size: 0.9rem;
+		padding: var(--spacing-xs) 0;
+		display: inline-block;
+	}
+
+	.footer-link:hover {
+		color: var(--primary);
+		transform: translateX(4px);
+	}
+</style>

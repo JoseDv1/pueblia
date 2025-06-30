@@ -4,178 +4,19 @@ import Layout from "@/layouts/Layout.astro";
 import B2BSection from "@/components/organism/B2BSection.astro";
 import B2CSection from "@/components/organism/B2CSection.astro";
 import HowItWorksSection from "@/components/organism/HowItWorksSection.astro";
+import TestimonialsSection from "@/components/organism/TestimonialsSection.astro";
+import PricingSection from "@/components/organism/PricingSection.astro";
+import FAQSection from "@/components/organism/FAQSection.astro";
+import Footer from "@/components/organism/Footer.astro";
 ---
 
 <Layout title="Pueblia - Descubre y potencia lo mejor de Guatapé">
 	<Hero />
-
-	<!-- Beneficios B2B -->
 	<B2BSection />
-
-	<!-- Beneficios B2C -->
 	<B2CSection />
-
-	<!-- Cómo funciona -->
 	<HowItWorksSection />
-
-	<!-- Testimonios -->
-	<section class="testimonials">
-		<div class="container">
-			<h2 class="section-title">Casos de éxito</h2>
-			<p class="section-subtitle">Lo que dicen nuestros emprendedores</p>
-
-			<div class="testimonials-grid">
-				<div class="testimonial-card">
-					<div class="testimonial-avatar">👨‍💼</div>
-					<blockquote>
-						"Con Pueblia llenamos tours entre semana sin pagar anuncios."
-					</blockquote>
-					<cite>— EcoTour Guatapé</cite>
-				</div>
-
-				<div class="testimonial-card">
-					<div class="testimonial-avatar">👩‍🍳</div>
-					<blockquote>
-						"Mis empanadas ahora llegan a turistas que nunca hubiera conocido."
-					</blockquote>
-					<cite>— Doña María, Empanadas del Malecón</cite>
-				</div>
-
-				<div class="testimonial-card">
-					<div class="testimonial-avatar">🧑‍🎨</div>
-					<blockquote>
-						"Vendo más artesanías locales gracias al chat directo con clientes."
-					</blockquote>
-					<cite>— Artesanías Coloridas</cite>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Pricing -->
-	<section class="pricing">
-		<div class="container">
-			<h2 class="section-title">Planes y precios</h2>
-			<p class="section-subtitle">Elige el plan perfecto para tu negocio</p>
-
-			<div class="pricing-grid">
-				<div class="pricing-card">
-					<h3>Gratis</h3>
-					<div class="price">0 COP</div>
-					<p class="plan-description">Emprendedor que inicia</p>
-					<ul class="features-list">
-						<li>✅ Perfil básico</li>
-						<li>✅ Chat con clientes</li>
-						<li>✅ Geolocalización</li>
-					</ul>
-					<button class="btn btn-outline">Regístrate ahora</button>
-				</div>
-
-				<div class="pricing-card featured">
-					<div class="badge">Recomendado</div>
-					<h3>Pueblia Plus</h3>
-					<div class="price">45k COP<span>/mes</span></div>
-					<p class="plan-description">Negocios que quieren analíticas</p>
-					<ul class="features-list">
-						<li>✅ Todo lo del plan Gratis</li>
-						<li>✅ Dashboard completo</li>
-						<li>✅ Estadísticas avanzadas</li>
-						<li>✅ Soporte prioritario</li>
-					</ul>
-					<button class="btn btn-primary">Pruébalo 30 días</button>
-				</div>
-
-				<div class="pricing-card">
-					<h3>Destacado</h3>
-					<div class="price">15k COP<span>/sem</span></div>
-					<p class="plan-description">Alta temporada</p>
-					<ul class="features-list">
-						<li>✅ Posición privilegiada</li>
-						<li>✅ Destacado en búsquedas</li>
-						<li>✅ Mayor visibilidad</li>
-					</ul>
-					<button class="btn btn-accent">Reserva tu lugar</button>
-				</div>
-			</div>
-
-			<p class="pricing-note">*Comisión 3% solo si el pago se procesa in-app</p>
-		</div>
-	</section>
-
-	<!-- FAQ -->
-	<section class="faq">
-		<div class="container">
-			<h2 class="section-title">Preguntas frecuentes</h2>
-
-			<div class="faq-list">
-				<details class="faq-item">
-					<summary>¿Qué necesito para registrarme?</summary>
-					<p>
-						Solo necesitas tu documento de identidad, información básica de tu
-						negocio y una foto del local. El proceso toma menos de 5 minutos.
-					</p>
-				</details>
-
-				<details class="faq-item">
-					<summary>¿Cómo se calcula la comisión?</summary>
-					<p>
-						Cobramos una comisión del 3% únicamente cuando procesamos el pago a
-						través de la app. Si usas tu propio medio de pago, no hay comisión.
-					</p>
-				</details>
-
-				<details class="faq-item">
-					<summary>¿Puedo usar mi propio medio de pago?</summary>
-					<p>
-						¡Por supuesto! Puedes seguir usando tu datafono, efectivo o
-						transferencias. Pueblia solo facilita la conexión con clientes.
-					</p>
-				</details>
-
-				<details class="faq-item">
-					<summary>¿La app funciona offline?</summary>
-					<p>
-						La información básica y los contactos guardados funcionan offline.
-						Para actualizaciones en tiempo real necesitas conexión a internet.
-					</p>
-				</details>
-			</div>
-		</div>
-	</section>
-
-	<!-- Footer -->
-	<footer class="footer">
-		<div class="container">
-			<div class="footer-content">
-				<div class="footer-section">
-					<h3>Pueblia</h3>
-					<p>Conectando Guatapé, un negocio a la vez</p>
-					<div class="social-links">
-						<a href="#">📷 Instagram</a>
-						<a href="#">🎵 TikTok</a>
-						<a href="#">💼 LinkedIn</a>
-					</div>
-				</div>
-
-				<div class="footer-section">
-					<h4>Enlaces</h4>
-					<ul>
-						<li><a href="#">Blog</a></li>
-						<li><a href="#">Roadmap público</a></li>
-						<li><a href="#">Política de privacidad</a></li>
-					</ul>
-				</div>
-
-				<div class="footer-section">
-					<h4>Contacto</h4>
-					<p>📱 WhatsApp Business</p>
-					<p>📧 soporte@pueblia.com</p>
-				</div>
-			</div>
-
-			<div class="footer-bottom">
-				<p>Hecho con ❤️ en Guatapé · Stack Bun + Astro</p>
-			</div>
-		</div>
-	</footer>
+	<TestimonialsSection />
+	<PricingSection />
+	<FAQSection />
+	<Footer />
 </Layout>

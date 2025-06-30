@@ -1,0 +1,97 @@
+---
+import PricingGrid, { type PricingPlan } from "../molecules/PricingGrid.astro";
+
+// Planes de precios definidos
+const pricingPlans: PricingPlan[] = [
+	{
+		title: "Gratis",
+		price: "0 COP",
+		description: "Emprendedor que inicia",
+		features: [
+			"✅ Perfil básico",
+			"✅ Chat con clientes",
+			"✅ Geolocalización",
+		],
+		buttonText: "Regístrate ahora",
+		buttonStyle: "neutral",
+	},
+	{
+		title: "Pueblia Plus",
+		price: "45k COP",
+		period: "/mes",
+		description: "Negocios que quieren analíticas",
+		features: [
+			"✅ Todo lo del plan Gratis",
+			"✅ Dashboard completo",
+			"✅ Estadísticas avanzadas",
+			"✅ Soporte prioritario",
+		],
+		buttonText: "Pruébalo 30 días",
+		buttonStyle: "primary",
+		featured: true,
+		badge: "Recomendado",
+	},
+	{
+		title: "Destacado",
+		price: "15k COP",
+		period: "/sem",
+		description: "Alta temporada",
+		features: [
+			"✅ Posición privilegiada",
+			"✅ Destacado en búsquedas",
+			"✅ Mayor visibilidad",
+		],
+		buttonText: "Reserva tu lugar",
+		buttonStyle: "secondary",
+	},
+];
+---
+
+<section class="pricing">
+	<div class="container">
+		<h2 class="section-title">Planes y precios</h2>
+		<p class="section-subtitle">Elige el plan perfecto para tu negocio</p>
+
+		<PricingGrid
+			plans={pricingPlans}
+			note="*Comisión 3% solo si el pago se procesa in-app"
+		/>
+	</div>
+</section>
+
+<style>
+	.pricing {
+		padding: var(--spacing-xxxxl) 0;
+
+		position: relative;
+		overflow: hidden;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		position: relative;
+		z-index: 1;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		font-weight: 800;
+		text-align: center;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-lg);
+		position: relative;
+	}
+
+	.section-subtitle {
+		font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+		text-align: center;
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-xxl);
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+		line-height: 1.6;
+	}
+</style>

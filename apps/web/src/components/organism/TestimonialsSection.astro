@@ -1,0 +1,70 @@
+---
+import TestimonialsGrid, {
+	type Testimonial,
+} from "../molecules/TestimonialsGrid.astro";
+
+// Testimonios de casos de éxito
+const successTestimonials: Testimonial[] = [
+	{
+		avatar: "👨‍💼",
+		quote: "Con Pueblia llenamos tours entre semana sin pagar anuncios.",
+		author: "— EcoTour Guatapé",
+	},
+	{
+		avatar: "👩‍🍳",
+		quote: "Mis empanadas ahora llegan a turistas que nunca hubiera conocido.",
+		author: "— Doña María, Empanadas del Malecón",
+	},
+	{
+		avatar: "🧑‍🎨",
+		quote: "Vendo más artesanías locales gracias al chat directo con clientes.",
+		author: "— Artesanías Coloridas",
+	},
+];
+---
+
+<section class="testimonials">
+	<div class="container">
+		<h2 class="section-title">Casos de éxito</h2>
+		<p class="section-subtitle">Lo que dicen nuestros emprendedores</p>
+
+		<TestimonialsGrid testimonials={successTestimonials} />
+	</div>
+</section>
+
+<style>
+	.testimonials {
+		padding: var(--spacing-xxxxl) 0;
+
+		position: relative;
+		overflow: hidden;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		position: relative;
+		z-index: 1;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		font-weight: 800;
+		text-align: center;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-lg);
+		position: relative;
+	}
+
+	.section-subtitle {
+		font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+		text-align: center;
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-xxl);
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+		line-height: 1.6;
+	}
+</style>

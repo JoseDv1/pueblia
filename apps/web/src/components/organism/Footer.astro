@@ -1,0 +1,76 @@
+---
+import FooterContent, {
+	type FooterSectionData,
+} from "../molecules/FooterContent.astro";
+import FooterBottom from "../molecules/FooterBottom.astro";
+
+// Datos del footer estructurados
+const footerSections: FooterSectionData[] = [
+	{
+		title: "Pueblia",
+		description: "Conectando Guatapé, un negocio a la vez",
+		socialLinks: [
+			{
+				href: "#",
+				icon: "📷",
+				label: "Instagram",
+			},
+			{
+				href: "#",
+				icon: "🎵",
+				label: "TikTok",
+			},
+			{
+				href: "#",
+				icon: "💼",
+				label: "LinkedIn",
+			},
+		],
+	},
+	{
+		title: "Enlaces",
+		links: [
+			{
+				href: "#",
+				text: "Blog",
+			},
+			{
+				href: "#",
+				text: "Roadmap público",
+			},
+			{
+				href: "#",
+				text: "Política de privacidad",
+			},
+		],
+	},
+	{
+		title: "Contacto",
+		contactInfo: ["📱 WhatsApp Business", "📧 soporte@pueblia.com"],
+	},
+];
+---
+
+<footer class="footer">
+	<div class="container">
+		<FooterContent sections={footerSections} />
+		<FooterBottom text="Hecho con ❤️ en Guatapé" />
+	</div>
+</footer>
+
+<style>
+	.footer {
+		padding: var(--spacing-xxxxl) 0 var(--spacing-xl);
+		border-top: 1px solid var(--border-color);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+		position: relative;
+		z-index: 1;
+	}
+</style>

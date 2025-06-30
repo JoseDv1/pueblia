@@ -1,0 +1,154 @@
+---
+import Badge from "./Badge.astro";
+import LinkButton from "./LinkButton.astro";
+
+interface Props {
+	title: string;
+	price: string;
+	period?: string;
+	description: string;
+	features: string[];
+	buttonText: string;
+	buttonStyle: "primary" | "secondary" | "neutral";
+	featured?: boolean;
+	badge?: string;
+}
+
+const {
+	title,
+	price,
+	period,
+	description,
+	features,
+	buttonText,
+	buttonStyle,
+	featured = false,
+	badge,
+} = Astro.props;
+---
+
+<div
+	class="pricing-card"
+	class:list={{
+		featured: featured,
+	}}
+>
+	{
+		badge && (
+			<span class="badge">
+				<Badge icon="⭐" text={badge} />
+			</span>
+		)
+	}
+
+	<h3>{title}</h3>
+	<div class="price">
+		{price}
+		{period && <span>{period}</span>}
+	</div>
+	<p class="plan-description">{description}</p>
+
+	<ul class="features-list">
+		{features.map((feature) => <li>{feature}</li>)}
+	</ul>
+
+	<LinkButton href="#" variant={buttonStyle}>
+		{buttonText}
+	</LinkButton>
+</div>
+
+<style>
+	.badge {
+		position: absolute;
+		bottom: calc(var(--spacing-xxl) * -1);
+		right: 0;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1;
+	}
+
+	.pricing-card {
+		background: var(--top-color);
+		padding: var(--spacing-xl);
+		border-radius: var(--border-radius);
+		border: 1px solid var(--border-color);
+		box-shadow: 0 8px 25px var(--shadow-color);
+		transition: all var(--transition-duration) ease;
+		position: relative;
+		text-align: center;
+	}
+
+	.pricing-card.featured {
+		border: 2px solid var(--primary);
+		transform: scale(1.05);
+		box-shadow: 0 15px 40px var(--shadow-color);
+
+		&:hover {
+			transform: scale(1.05) translateY(-8px);
+		}
+	}
+
+	.pricing-card::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 4px;
+		background: linear-gradient(90deg, var(--primary), var(--secondary));
+		transform: scaleX(0);
+		transition: transform var(--transition-duration) ease;
+	}
+
+	.pricing-card:hover {
+		transform: translateY(-8px);
+		box-shadow: 0 15px 40px var(--shadow-color);
+	}
+
+	.pricing-card:hover::before {
+		transform: scaleX(1);
+	}
+
+	.pricing-card h3 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-md);
+		margin-top: var(--spacing-md);
+	}
+
+	.price {
+		font-size: 2.5rem;
+		font-weight: 800;
+		color: var(--primary);
+		margin-bottom: var(--spacing-sm);
+		line-height: 1;
+	}
+
+	.price span {
+		font-size: 1rem;
+		font-weight: 400;
+		color: var(--text-muted);
+	}
+
+	.plan-description {
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-lg);
+		font-size: 0.9rem;
+	}
+
+	.features-list {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 var(--spacing-xl) 0;
+		text-align: left;
+	}
+
+	.features-list li {
+		padding: var(--spacing-xs) 0;
+		color: var(--text-color);
+		font-size: 0.9rem;
+	}
+</style>

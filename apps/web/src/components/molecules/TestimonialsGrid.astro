@@ -1,0 +1,43 @@
+---
+import TestimonialCard from "../atoms/TestimonialCard.astro";
+
+export interface Testimonial {
+	avatar: string;
+	quote: string;
+	author: string;
+}
+
+interface Props {
+	testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<div class="testimonials-grid">
+	{
+		testimonials.map((testimonial) => (
+			<TestimonialCard
+				avatar={testimonial.avatar}
+				quote={testimonial.quote}
+				author={testimonial.author}
+			/>
+		))
+	}
+</div>
+
+<style>
+	.testimonials-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xxl);
+	}
+
+	/* Efecto de distribución escalonada en pantallas grandes */
+	@media (min-width: 1024px) {
+		.testimonials-grid > :nth-child(2) {
+			transform: translateY(var(--spacing-lg));
+		}
+	}
+</style>

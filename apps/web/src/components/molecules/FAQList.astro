@@ -1,0 +1,25 @@
+---
+import FAQItem from "../atoms/FAQItem.astro";
+
+export interface FAQ {
+	question: string;
+	answer: string;
+}
+
+interface Props {
+	faqs: FAQ[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="faq-list">
+	{faqs.map((faq) => <FAQItem question={faq.question} answer={faq.answer} />)}
+</div>
+
+<style>
+	.faq-list {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+</style>

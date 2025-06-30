@@ -1,0 +1,125 @@
+---
+import SocialLink from "../atoms/SocialLink.astro";
+import FooterLink from "../atoms/FooterLink.astro";
+
+export interface SocialLinkData {
+	href: string;
+	icon: string;
+	label: string;
+}
+
+export interface FooterLinkData {
+	href: string;
+	text: string;
+}
+
+interface Props {
+	title: string;
+	description?: string;
+	socialLinks?: SocialLinkData[];
+	links?: FooterLinkData[];
+	contactInfo?: string[];
+}
+
+const { title, description, socialLinks, links, contactInfo } = Astro.props;
+---
+
+<div class="footer-section">
+	<h3 class="footer-title">{title}</h3>
+
+	{description && <p class="footer-description">{description}</p>}
+
+	{
+		socialLinks && (
+			<div class="social-links">
+				{socialLinks.map((social) => (
+					<SocialLink
+						href={social.href}
+						icon={social.icon}
+						label={social.label}
+					/>
+				))}
+			</div>
+		)
+	}
+
+	{
+		links && (
+			<ul class="footer-links">
+				{links.map((link) => (
+					<li>
+						<FooterLink href={link.href} text={link.text} />
+					</li>
+				))}
+			</ul>
+		)
+	}
+
+	{
+		contactInfo && (
+			<div class="contact-info">
+				{contactInfo.map((info) => (
+					<p class="contact-item">{info}</p>
+				))}
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.footer-section {
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.footer-title {
+		font-size: 1.2rem;
+		font-weight: 700;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.footer-section h4 {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text-color);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.footer-description {
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-md);
+		line-height: 1.5;
+		font-size: 0.9rem;
+	}
+
+	.social-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
+	}
+
+	.footer-links {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.footer-links li {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.contact-info {
+		color: var(--text-muted);
+		font-size: 0.9rem;
+	}
+
+	.contact-item {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	@media (min-width: 768px) {
+		.footer-section {
+			margin-bottom: 0;
+		}
+	}
+</style>
