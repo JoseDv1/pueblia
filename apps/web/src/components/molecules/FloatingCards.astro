@@ -1,0 +1,46 @@
+---
+import Badge from "../atoms/Badge.astro";
+
+export interface FloatingCard {
+	icon: string;
+	text: string;
+	position: [x: string, y: string];
+}
+
+interface Props {
+	cards: FloatingCard[];
+	className?: string[];
+}
+
+const { cards, className, ...rest } = Astro.props;
+---
+
+<div class:list={className} {...rest}>
+	{
+		cards.map((card) => (
+			<Badge
+				icon={card.icon}
+				text={card.text}
+				style={`
+					top: ${card.position[1]};
+					left: ${card.position[0]}
+			`}
+			/>
+		))
+	}
+</div>
+
+<style>
+	div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+
+	div > * {
+		position: absolute;
+		animation: float 3s ease-in-out infinite;
+	}
+</style>

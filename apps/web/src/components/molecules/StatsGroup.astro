@@ -1,0 +1,63 @@
+---
+export interface Stat {
+	number: string;
+	label: string;
+}
+
+interface Props {
+	stats: Stat[];
+	className?: string;
+}
+
+const { stats, className, ...rest } = Astro.props;
+---
+
+<!-- molecules/StatsGroup.astro -->
+<ul class="stats-group" class:list={className} {...rest}>
+	{
+		stats.map((stat, index) => (
+			<>
+				<li class="stat-item">
+					<span class="stat-number">{stat.number}</span>
+					<span class="stat-label">{stat.label}</span>
+				</li>
+				{index < stats.length - 1 && <div class="stat-divider" />}
+			</>
+		))
+	}
+</ul>
+
+<style>
+	.stat-item {
+		text-align: center;
+	}
+
+	.stat-number {
+		display: block;
+		font-size: 1.5rem;
+		font-weight: 800;
+		color: var(--primary);
+		line-height: 1;
+	}
+
+	.stat-label {
+		display: block;
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-top: 0.25rem;
+	}
+
+	.stat-divider {
+		width: 1px;
+		height: 30px;
+		background: var(--border-color);
+	}
+
+	.stats-group {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-lg);
+
+		animation: slideInUp 0.8s ease-out 0.8s both;
+	}
+</style>

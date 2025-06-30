@@ -1,0 +1,305 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Estilos">
+	<main class="container">
+		<header>
+			<h1>Guía de Estilos</h1>
+			<p>Documentación completa del sistema de diseño</p>
+		</header>
+
+		<section class="color-scheme-toggle">
+			<h2>Cambiar Tema</h2>
+			<button id="theme-toggle">Alternar Modo Claro/Oscuro</button>
+		</section>
+
+		<section class="colors-section">
+			<h2>Colores Principales</h2>
+			<div class="color-grid">
+				<div class="color-card" style="background-color: var(--primary)">
+					<span>Primary</span>
+					<code>hsl(200, 70%, 70%) light<br />hsl(200, 70%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--primary-light)">
+					<span>Primary Light</span>
+					<code>hsl(200, 70%, 80%) light<br />hsl(200, 70%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--primary-dark)">
+					<span>Primary Dark</span>
+					<code>hsl(200, 70%, 60%) light<br />hsl(200, 70%, 40%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--secondary)">
+					<span>Secondary</span>
+					<code>hsl(30, 70%, 60%) light<br />hsl(30, 70%, 40%) dark</code>
+				</div>
+				<div
+					class="color-card"
+					style="background-color: var(--secondary-light)"
+				>
+					<span>Secondary Light</span>
+					<code>hsl(30, 70%, 70%) light<br />hsl(30, 70%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--secondary-dark)">
+					<span>Secondary Dark</span>
+					<code>hsl(30, 70%, 50%) light<br />hsl(30, 70%, 20%) dark</code>
+				</div>
+			</div>
+		</section>
+
+		<section class="accent-colors">
+			<h2>Colores de Acento</h2>
+			<div class="color-grid">
+				<div class="color-card" style="background-color: var(--success)">
+					<span>Success</span>
+					<code>hsl(120, 70%, 60%) light<br />hsl(120, 70%, 40%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--success-light)">
+					<span>Success Light</span>
+					<code>hsl(120, 70%, 80%) light<br />hsl(120, 70%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--success-dark)">
+					<span>Success Dark</span>
+					<code>hsl(120, 70%, 50%) light<br />hsl(120, 70%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--warning)">
+					<span>Warning</span>
+					<code>hsl(40, 70%, 60%) light<br />hsl(40, 70%, 40%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--warning-light)">
+					<span>Warning Light</span>
+					<code>hsl(40, 70%, 80%) light<br />hsl(40, 70%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--warning-dark)">
+					<span>Warning Dark</span>
+					<code>hsl(40, 70%, 50%) light<br />hsl(40, 70%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--error)">
+					<span>Error</span>
+					<code>hsl(0, 70%, 60%) light<br />hsl(0, 70%, 40%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--error-light)">
+					<span>Error Light</span>
+					<code>hsl(0, 70%, 80%) light<br />hsl(0, 70%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--error-dark)">
+					<span>Error Dark</span>
+					<code>hsl(0, 70%, 50%) light<br />hsl(0, 70%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--neutral)">
+					<span>Neutral</span>
+					<code>hsl(0, 0%, 80%) light<br />hsl(0, 0%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--neutral-light)">
+					<span>Neutral Light</span>
+					<code>hsl(0, 0%, 90%) light<br />hsl(0, 0%, 10%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--neutral-dark)">
+					<span>Neutral Dark</span>
+					<code>hsl(0, 0%, 70%) light<br />hsl(0, 0%, 30%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--info)">
+					<span>Info</span>
+					<code>hsl(210, 70%, 60%) light<br />hsl(210, 70%, 40%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--info-light)">
+					<span>Info Light</span>
+					<code>hsl(210, 70%, 80%) light<br />hsl(210, 70%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--info-dark)">
+					<span>Info Dark</span>
+					<code>hsl(210, 70%, 50%) light<br />hsl(210, 70%, 30%) dark</code>
+				</div>
+			</div>
+		</section>
+
+		<section class="background-colors">
+			<h2>Colores de Fondo</h2>
+			<div class="color-grid">
+				<div
+					class="color-card"
+					style="background-color: var(--background-color)"
+				>
+					<span>Background</span>
+					<code>hsl(0, 0%, 90%) light<br />hsl(0, 0%, 20%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--middle-color)">
+					<span>Middle</span>
+					<code>hsl(0, 0%, 95%) light<br />hsl(0, 0%, 15%) dark</code>
+				</div>
+				<div class="color-card" style="background-color: var(--top-color)">
+					<span>Top</span>
+					<code>hsl(0, 0%, 100%) light<br />hsl(0, 0%, 10%) dark</code>
+				</div>
+			</div>
+		</section>
+
+		<section class="text-colors">
+			<h2>Colores de Texto</h2>
+			<div class="text-examples">
+				<p style="color: var(--text-color)">
+					Texto principal - <code
+						>hsl(0, 0%, 10%) light<br />hsl(0, 0%, 90%) dark</code
+					>
+				</p>
+				<p style="color: var(--text-muted)">
+					Texto secundario - <code
+						>hsl(0, 0%, 30%) light<br />hsl(0, 0%, 70%) dark</code
+					>
+				</p>
+				<p style="color: var(--text-disabled)">
+					Texto deshabilitado - <code
+						>hsl(0, 0%, 50%) light<br />hsl(0, 0%, 50%) dark</code
+					>
+				</p>
+			</div>
+		</section>
+	</main>
+
+	<script>
+		const themeToggle = document.getElementById("theme-toggle");
+		const html = document.documentElement;
+
+		themeToggle!.addEventListener("click", () => {
+			const currentScheme = html.style.colorScheme;
+			if (currentScheme === "dark") {
+				html.style.colorScheme = "light";
+			} else {
+				html.style.colorScheme = "dark";
+			}
+		});
+	</script>
+</Layout>
+
+<style>
+	body {
+		color: var(--text-color);
+		background: linear-gradient(
+			135deg,
+			var(--primary-light) 0%,
+			var(--middle-color) 100%
+		);
+		min-height: 100vh;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: var(--spacing-lg);
+	}
+
+	header {
+		text-align: center;
+		margin-bottom: var(--spacing-xxl);
+	}
+
+	h1 {
+		color: var(--text-color);
+		font-size: 2.5rem;
+		margin-bottom: var(--spacing-md);
+	}
+
+	h2 {
+		color: var(--text-color);
+		font-size: 1.5rem;
+		margin-bottom: var(--spacing-lg);
+		border-bottom: 2px solid var(--border-color);
+		padding-bottom: var(--spacing-sm);
+	}
+
+	section {
+		margin-bottom: var(--spacing-xxl);
+		background-color: var(--top-color);
+		padding: var(--spacing-lg);
+		border-radius: var(--border-radius);
+		border: 1px solid var(--border-color);
+	}
+
+	.color-scheme-toggle {
+		text-align: center;
+	}
+
+	#theme-toggle {
+		background-color: var(--primary);
+		color: var(--top-color);
+		border: none;
+		padding: var(--spacing-md) var(--spacing-lg);
+		border-radius: var(--border-radius);
+		cursor: pointer;
+		font-size: 1rem;
+		transition: all var(--transition-duration);
+	}
+
+	#theme-toggle:hover {
+		background-color: var(--primary-dark);
+	}
+
+	.color-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: var(--spacing-md);
+	}
+
+	.color-card {
+		padding: var(--spacing-md);
+		border-radius: var(--border-radius);
+		text-align: center;
+		color: var(--text-color);
+		border: 1px solid var(--border-color);
+	}
+
+	.color-card span {
+		display: block;
+		font-weight: 600;
+	}
+
+	.color-card code {
+		font-size: 0.875rem;
+		background-color: transparent;
+		padding: var(--spacing-xs);
+		border-radius: 4px;
+	}
+
+	.text-examples p {
+		font-size: 1.125rem;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.spacing-examples {
+		display: flex;
+		align-items: flex-end;
+		gap: var(--spacing-md);
+		flex-wrap: wrap;
+	}
+
+	.spacing-item {
+		background-color: var(--primary);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		border-radius: 4px;
+	}
+
+	.spacing-item span {
+		position: absolute;
+		bottom: -30px;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+
+	.utility-examples {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+
+	.utility-examples > div {
+		display: inline-block;
+		color: var(--top-color);
+		font-weight: 600;
+	}
+</style>

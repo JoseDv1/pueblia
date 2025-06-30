@@ -1,0 +1,47 @@
+---
+import LinkButton from "../atoms/LinkButton.astro";
+
+export interface CTA {
+	href: string;
+	className?: string[];
+	variant?:
+		| "primary"
+		| "secondary"
+		| "danger"
+		| "warning"
+		| "success"
+		| "info"
+		| "neutral";
+	light?: "light" | "dark";
+	icon: string;
+	text: string;
+}
+
+interface Props {
+	ctas: CTA[];
+	className?: string[];
+	Tag?: string;
+}
+
+const { ctas, className, Tag = "div", ...rest } = Astro.props;
+---
+
+<Tag class:list={[className, "hero-cta"]} {...rest}>
+	{
+		ctas.map((cta) => (
+			<LinkButton href={cta.href} variant={cta.variant} light={cta.light}>
+				<span class="btn-icon">{cta.icon}</span>
+				<span class="btn-text">{cta.text}</span>
+			</LinkButton>
+		))
+	}
+</Tag>
+
+<style>
+	.hero-cta {
+		display: flex;
+		gap: var(--spacing-md);
+		margin-bottom: 3rem;
+		animation: slideInUp 0.8s ease-out 0.6s both;
+	}
+</style>

@@ -23,3 +23,9 @@ a {
 svg {
 	fill: currentColor;
 }
+
+ul,
+li,
+ol {
+	list-style: none;
+}

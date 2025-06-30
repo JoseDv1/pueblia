@@ -1,0 +1,172 @@
+---
+import Badge from "@/components/atoms/Badge.astro";
+import LinkButton from "../atoms/LinkButton.astro";
+import CTAGroup, { type CTA } from "../molecules/CTAGroup.astro";
+import StatsGroup from "../molecules/StatsGroup.astro";
+import FloatingCards, {
+	type FloatingCard,
+} from "../molecules/FloatingCards.astro";
+import ScrollIndicator from "../atoms/ScrollIndicator.astro";
+
+const heroCTAs: CTA[] = [
+	{
+		href: "#business",
+		icon: "🏪",
+		text: "Quiero listar mi negocio",
+		variant: "primary",
+	},
+	{
+		href: "#experiences",
+		icon: "🗺️",
+		text: "Quiero descubrir experiencias",
+		variant: "primary",
+	},
+];
+
+const heroStats = [
+	{ number: "50+", label: "Negocios locales" },
+	{ number: "1000+", label: "Experiencias únicas" },
+	{ number: "24/7", label: "Ofertas variadas" },
+];
+
+const floatingCards: FloatingCard[] = [
+	{ icon: "🎨", text: "Artesanías", position: ["-10%", "10%"] },
+	{ icon: "🍽️", text: "Gastronomía", position: ["70%", "50%"] },
+	{ icon: "🚤", text: "Aventura", position: ["10%", "80%"] },
+];
+
+const title = `Descubre y potencia lo mejor de
+				<span class="highlight-text">Guatapé</span>
+				en un solo lugar`;
+const subtitle = `<span class="highlight-text">Experiencias auténticas</span> para cada visitante.
+				<br />
+				<span class="highlight-text"
+					>Visibilidad, conversión y fidelización</span
+				> para tu negocio.`;
+
+const image = {
+	alt: "Hero image",
+	src: "/favicon.svg",
+};
+---
+
+<section id="hero">
+	<main class="hero-content">
+		<div class="hero-text">
+			<h1>Pueblía</h1>
+			<h2 set:html={title} />
+			<p set:html={subtitle} />
+			<CTAGroup ctas={heroCTAs} />
+			<StatsGroup stats={heroStats} />
+		</div>
+
+		<div class="hero-visual">
+			<picture>
+				<img src={image.src} alt={image.alt} />
+			</picture>
+			<FloatingCards cards={floatingCards} />
+		</div>
+	</main>
+
+	<ScrollIndicator text="Descubre mas" class:list={"scroll-indicator"} />
+</section>
+
+<style>
+	#hero {
+		height: 100dvh;
+		min-height: 600px;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(
+			135deg,
+			var(--primary-light) 0%,
+			var(--middle-color) 100%
+		);
+
+		@media (max-width: 768px) {
+			height: auto;
+			min-height: 100vh;
+			padding: 2rem 0;
+		}
+	}
+
+	main {
+		max-width: 1500px;
+		width: 100%;
+		padding: 0 2rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-xxl);
+		align-items: center;
+
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 800;
+		line-height: 1.2;
+		margin-bottom: 1rem;
+		color: var(--text-color);
+		animation: slideInDown 0.8s ease-out;
+		color: var(--primary-dark);
+	}
+
+	h2 {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 800;
+		line-height: 1.2;
+		margin-bottom: 1.5rem;
+		color: var(--text-color);
+		animation: slideInUp 0.8s ease-out 0.2s both;
+	}
+
+	p {
+		font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+		line-height: 1.6;
+		margin-bottom: 2.5rem;
+		color: var(--text-muted);
+		animation: slideInUp 0.8s ease-out 0.4s both;
+	}
+
+	h2 :global(.highlight-text) {
+		font-weight: 800;
+	}
+
+	.btn-icon {
+		font-size: 1.2rem;
+	}
+
+	.hero-visual {
+		position: relative;
+		animation: slideInRight 0.8s ease-out 0.4s both;
+	}
+
+	picture {
+		position: relative;
+		width: 100%;
+		height: 400px;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		box-shadow: 0 10px 40px var(--shadow-color);
+		position: relative;
+	}
+
+	.scroll-indicator {
+		color: var(--text-muted);
+
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
+</style>

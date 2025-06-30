@@ -1,0 +1,35 @@
+---
+interface Props {
+	text?: string;
+	className?: string[];
+	[x: string]: any;
+}
+
+const { className, text, ...rest } = Astro.props;
+---
+
+<footer class="scroll-indicator" class:list={[className]} {...rest}>
+	<p class="scroll-text">{text}</p>
+	<i class="scroll-arrow">↓</i>
+</footer>
+
+<style>
+	footer {
+		position: absolute;
+		bottom: 2rem;
+		z-index: 10;
+		text-align: center;
+		color: var(--text-muted);
+		animation: bounce 2s ease-in-out infinite;
+	}
+
+	p {
+		font-size: 0.9rem;
+		margin-bottom: 0.5rem;
+	}
+
+	i {
+		font-size: 1.5rem;
+		animation: bounce 1.5s ease-in-out infinite;
+	}
+</style>
