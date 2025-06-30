@@ -1,4 +1,5 @@
 ---
+import LinkButton from "../atoms/LinkButton.astro";
 import BenefitGrid, { type Benefit } from "../molecules/BenefitGrid.astro";
 
 const benefits: Benefit[] = [
@@ -40,7 +41,9 @@ const benefits: Benefit[] = [
 		<BenefitGrid benefits={benefits} />
 
 		<div class="cta-center">
-			<button class="shine">📊 Listar mi negocio</button>
+			<LinkButton href="/register" variant="secondary"
+				>📊 Listar mi negocio</LinkButton
+			>
 		</div>
 	</div>
 </section>
@@ -98,37 +101,8 @@ const benefits: Benefit[] = [
 	}
 
 	.cta-center {
-		text-align: center;
-	}
-
-	.btn {
-		display: inline-flex;
+		display: flex;
 		align-items: center;
-		gap: var(--spacing-sm);
-		font-size: 1.1rem;
-		font-weight: 600;
-		padding: var(--spacing-lg) var(--spacing-xl);
-		border: none;
-		border-radius: var(--border-radius);
-		cursor: pointer;
-		transition: all var(--transition-duration) ease;
-		text-decoration: none;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.btn-accent {
-		background-color: var(--secondary);
-		color: var(--top-color);
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-	}
-
-	.btn-accent:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-	}
-
-	.btn-accent:active {
-		transform: translateY(0);
+		justify-content: center;
 	}
 </style>
