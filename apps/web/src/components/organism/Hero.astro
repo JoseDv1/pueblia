@@ -10,16 +10,16 @@ import ScrollIndicator from "../atoms/ScrollIndicator.astro";
 
 const heroCTAs: CTA[] = [
 	{
-		href: "#business",
-		icon: "🏪",
-		text: "Quiero listar mi negocio",
-		variant: "primary",
-	},
-	{
 		href: "#experiences",
 		icon: "🗺️",
 		text: "Quiero descubrir experiencias",
 		variant: "primary",
+	},
+	{
+		href: "#business",
+		icon: "🏪",
+		text: "Quiero listar mi negocio",
+		variant: "secondary",
 	},
 ];
 
@@ -79,11 +79,6 @@ const image = {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: linear-gradient(
-			135deg,
-			var(--primary-light) 0%,
-			var(--middle-color) 100%
-		);
 
 		@media (max-width: 768px) {
 			height: auto;
