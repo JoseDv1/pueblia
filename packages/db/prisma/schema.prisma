@@ -46,7 +46,7 @@ model User {
   Notifications          Notification[]           @relation("UserNotifications")
   Commissions            Commission[]             @relation("CommissionUser")
 
-  role      UserRole?  @default(USER)
+  role      UserRole   @default(USER)
   Orders    Orders[]   @relation("UserOrders")
   Reviews   Review[]   @relation("UserReviews")
   Favorites Favorite[] @relation("UserFavorites")
