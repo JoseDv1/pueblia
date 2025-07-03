@@ -116,18 +116,10 @@ model EmailVerificationToken {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String          @id @default(cuid())
   userId            String
-  type              String // "oauth" | "email" | "credentials"
-  provider          String // "google" | "facebook" | "twitter" | "github" | etc.
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  provider          AccountProvider
+  providerAccountId String          @map("provider_account_id")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -138,6 +130,11 @@ model Account {
   @@index([userId])
   @@index([provider])
   @@map("accounts")
+}
+
+enum AccountProvider {
+  GOOGLE
+  EMAIL
 }
 
 model VerificationToken {
