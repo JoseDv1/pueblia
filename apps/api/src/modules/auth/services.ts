@@ -55,3 +55,62 @@ export async function register(email: string, password: string, confirmPassword:
 	};
 }
 
+export async function findOrCreateGoogleUser(googleProfile: {
+	id: string;
+	email: string;
+	name?: string;
+	picture?: string;
+}) {
+	// Buscar si ya existe una cuenta OAuth para este usuario
+	const account = await prisma.account.findUnique({
+		where: {
+			provider_providerAccountId: {
+				provider: "GOOGLE",
+				providerAccountId: googleProfile.id,
+			},
+		},
+		include: {
+			user: true,
+		},
+	});
+
+	// Usuario ya existe, actualizar último login
+	if (account) {
+		const user = await prisma.user.update({
+			where: { id: account.userId },
+			data: { lastLoginAt: new Date() },
+		});
+		return user;
+	}
+
+	// Verificar si ya existe un usuario con este email
+	let user = await prisma.user.findUniqueOrThrow({
+		where: { email: googleProfile.email },
+	});
+
+	if (!user) {
+		// Si no existe, crear un nuevo usuario
+		user = await prisma.user.create({
+			data: {
+				email: googleProfile.email,
+				name: googleProfile.name,
+				displayName: googleProfile.name,
+				image: googleProfile.picture,
+				emailVerified: true, // Google emails are already verified
+				lastLoginAt: new Date(),
+			},
+		});
+	}
+
+	// Crear cuenta OAuth asociada
+	await prisma.account.create({
+		data: {
+			userId: user.id,
+			provider: "GOOGLE",
+			providerAccountId: googleProfile.id,
+		},
+	});
+
+	return user;
+}
+
