@@ -4,17 +4,17 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/client"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 // ------------------ # AUTH # ------------------
 model User {
-  id          String  @id @default(cuid())
-  email       String  @unique
-  password    String? // Optional for OAuth users
-  name        String?
-  displayName String? @map("display_name")
+  id             String  @id @default(cuid())
+  email          String  @unique
+  hashedPassword String? @map("hashed_password") // Optional for OAuth users 
+  name           String?
+  displayName    String? @map("display_name")
 
   // Metadata fields
   isActive  Boolean   @default(true) @map("is_active")
@@ -28,7 +28,7 @@ model User {
   lastLoginAt   DateTime? // Para analytics de usuarios
 
   // OAuth fields
-  image String? // Profile image from OAuth provider
+  image String? @db.Text // URL to the user's profile image (optional)
 
   // Para el sistema de fidelidad
   loyaltyPoints Int @default(0) // Puntos de fidelidad del usuario
