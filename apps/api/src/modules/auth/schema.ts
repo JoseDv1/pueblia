@@ -12,3 +12,9 @@ export const authRegisterSchema = z.object({
 	confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters long"),
 	displayName: z.string().optional(),
 })
+
+export const authGoogleCallbackSchema = z.object({
+	code: z.string(),
+	state: z.string(),
+	error: z.string().optional(),
+});

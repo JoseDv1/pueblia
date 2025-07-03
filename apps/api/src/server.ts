@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { mainRouterV1 } from "./router";
 
-export const server = new Hono();
+export const server = new Hono()
+	.route("/api/v1", mainRouterV1)
 
 server.onError((error, ctx) => {
 	// Log the error details for debugging
