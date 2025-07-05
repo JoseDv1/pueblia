@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"dev": "bun run --filter apps/* dev",
-		"dev:api": "bun run apps/api/src/index.ts --watch",
+		"dev:api": "bun run --hot apps/api/src/index.ts",
 		"dev:web": "cd apps/web && bun run dev",
 		"build": "bun run build:api && bun run build:web",
 		"build:api": "cd apps/api && bun run build",

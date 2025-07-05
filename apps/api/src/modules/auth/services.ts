@@ -62,9 +62,7 @@ export async function login(email: string, password: string) {
 }
 
 export async function register(email: string, password: string, confirmPassword: string, name?: string, displayName?: string) {
-	if (password !== confirmPassword) {
-		throw new Error("Passwords do not match");
-	}
+
 	const hashedPassword = await Bun.password.hash(password, HASHING_OPTIONS);
 	const user = await prisma.user.create({
 		data: {

@@ -9,7 +9,25 @@ export const zValidator = <T extends z.$ZodType, Target extends keyof Validation
 ) =>
 	zv(target, schema, (result, _c) => {
 		if (!result.success) {
-			throw new HTTPException(400, { cause: result.error })
+			const issues = result.error.issues.map(issue => {
+				return { path: issue.path.toString(), message: issue.message }
+			})
+
+			const errorMessage = "Validation Error"
+
+
+			// If validation fails, throw an HTTPException with a 400 status code
+			throw new HTTPException(400, {
+				cause: result.error,
+				res: new Response(JSON.stringify({ message: errorMessage, issues }), {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					status: 400,
+				}),
+			})
 		}
 	})
+
+
 
