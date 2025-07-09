@@ -257,8 +257,8 @@ model Business {
   id          String  @id @default(cuid())
   name        String
   description String?
-
   ownerId     String
+
   owner       User   @relation(fields: [ownerId], references: [id], name: "BusinessOwner")
   AdminsUsers User[] @relation("BusinessAdmins")
 

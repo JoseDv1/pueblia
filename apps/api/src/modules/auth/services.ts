@@ -32,23 +32,23 @@ export async function createTokens(userId: string, role: $Enums.UserRole) {
 }
 
 export async function login(email: string, password: string) {
-	const user = await prisma.user.findUniqueOrThrow({
+	const userToValidate = await prisma.user.findUniqueOrThrow({
 		where: { email },
 		omit: {
 			hashedPassword: false
 		},
 	});
 
-	if (!user.hashedPassword) {
+	if (!userToValidate.hashedPassword) {
 		throw new HTTPException(400, { message: "User does not have a password set" });
 	}
-	const isValidPassword = await Bun.password.verify(password, user.hashedPassword, HASHING_OPTIONS.algorithm);
+	const isValidPassword = await Bun.password.verify(password, userToValidate.hashedPassword, HASHING_OPTIONS.algorithm);
 	if (!isValidPassword) {
 		throw new HTTPException(401, { message: "Invalid email or password" });
 	}
 
-	await prisma.user.update({
-		where: { id: user.id },
+	const user = await prisma.user.update({
+		where: { id: userToValidate.id },
 		data: {
 			lastLoginAt: new Date(),
 		}
@@ -198,13 +198,9 @@ export async function blacklistToken(refreshTokenValue: string, userId: string) 
 	});
 }
 
-export async function logout(token: string) {
-	const payload = await jwt.verify(token, JWT_SECRET!);
-	if (!payload.sub) {
-		throw new HTTPException(401, { message: "Invalid token payload" });
-	}
+export async function logout(userId: string, token: string) {
 	await prisma.sessionToken.delete({
-		where: { sessionToken: token, userId: payload.sub },
+		where: { sessionToken: token, userId },
 	});
 }
 

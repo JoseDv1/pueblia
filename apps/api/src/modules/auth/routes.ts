@@ -5,9 +5,8 @@ import { authGoogleCallbackSchema, authLoginSchema, authRegisterSchema } from ".
 import { login, register, findOrCreateGoogleUser, createTokens, refreshToken as refreshTokenService, logout, setAuthCookies } from "./services"
 import { HTTPException } from "hono/http-exception";
 import { COOKIES, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, OAUTH_REDIRECT_URI } from "@/config";
-import * as z from "zod/v4";
-import { decode } from "hono/jwt";
 import { getUserById } from "../users/services";
+import { JWTGuard } from "@/middleware/auth";
 
 export const authRouter = new Hono()
 	.post("/login", zValidator("json", authLoginSchema), async (ctx) => {
@@ -124,19 +123,17 @@ export const authRouter = new Hono()
 			throw new HTTPException(500, { message: "Internal server error during authentication" });
 		}
 	})
-	.get("/logout", zValidator("cookie", z.object({
-		"refreshToken": z.string()
-	})), async (ctx) => {
-		const { refreshToken } = ctx.req.valid("cookie");
-		await logout(refreshToken);
+	.get("/logout", JWTGuard(), async (ctx) => {
+		const { sub: userId } = ctx.get("jwtPayload");
+		const token = getCookie(ctx, COOKIES.refreshToken);
+		if (!token) throw new HTTPException(400, { message: "Missing refresh token" });
+		await logout(userId, token);
 		deleteCookie(ctx, COOKIES.accessToken);
 		deleteCookie(ctx, COOKIES.refreshToken);
 		return ctx.json({ message: "Logged out successfully" }, 200);
 	})
-	.get("/me", async (ctx) => {
-		const cookieToken = getCookie(ctx, COOKIES.accessToken);
-		if (!cookieToken) throw new HTTPException(401, { message: "Access token not provided" });
-		const { payload } = decode(cookieToken);
-		const user = await getUserById(payload.sub as string);
-		return ctx.json(user, 200);
+	.get("/me", JWTGuard(), async (ctx) => {
+		const { sub: userId } = ctx.get("jwtPayload")
+		const user = await getUserById(userId)
+		return ctx.json(user, 200)
 	})

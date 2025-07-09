@@ -5,3 +5,17 @@ export async function getUserById(userId: string) {
 		where: { id: userId },
 	})
 }
+
+export async function getAllUsers() {
+	return await prisma.user.findMany()
+}
+
+export async function softDelete(userId: string) {
+	return await prisma.user.update({
+		where: { id: userId },
+		data: {
+			isActive: false
+		}
+	})
+}
+
