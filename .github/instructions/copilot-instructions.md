@@ -2,7 +2,7 @@
 applyTo: "**"
 ---
 
-# GuataApp - Monorepo Project Instructions
+# Pueblia - Monorepo Project Instructions
 
 This is a Bun-based monorepo with the following architecture:
 
