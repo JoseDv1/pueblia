@@ -37,7 +37,6 @@ model User {
 
   // Relaciones
   Session                SessionToken[]
-  TokenBlacklist         TokenBlacklist[]
   PasswordReset          PasswordResetToken[]
   EmailVerificationToken EmailVerificationToken[]
   Account                Account[] // OAuth accounts
@@ -77,18 +76,6 @@ model SessionToken {
   @@index([userId], name: "idx_session_user")
   @@index([expiresAt], name: "idx_session_expires")
   @@map("session_tokens")
-}
-
-model TokenBlacklist {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique @map("session_token") // Refresh Token JWT
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
-  createdAt    DateTime @default(now()) @map("created_at")
-
-  @@index([userId])
-  @@index([createdAt])
-  @@map("token_blacklist")
 }
 
 model PasswordResetToken {

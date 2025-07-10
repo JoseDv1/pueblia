@@ -208,12 +208,6 @@ export async function findOrCreateGoogleUser(googleProfile: {
 }
 
 export async function refreshToken(refreshTokenValue: string) {
-	// Verificar que el token no esté en la blacklist
-	const blacklistedToken = await prisma.tokenBlacklist.findUnique({
-		where: { sessionToken: refreshTokenValue },
-	});
-	if (blacklistedToken) throw new HTTPException(401, { message: "Token is blacklisted" });
-
 	// Verificar, validar y decodificar el refresh token
 	const payload = await jwt.verify(refreshTokenValue, JWT_SECRET!);
 	if (!payload.sub || !payload.role) throw new HTTPException(401, { message: "Invalid token payload" });
@@ -248,21 +242,6 @@ export async function refreshToken(refreshTokenValue: string) {
 		refreshToken: newRefreshToken,
 	};
 
-}
-
-export async function blacklistToken(refreshTokenValue: string, userId: string) {
-	// Añadir el token a la blacklist
-	await prisma.tokenBlacklist.create({
-		data: {
-			sessionToken: refreshTokenValue,
-			userId,
-		},
-	});
-
-	// Eliminar el token de la tabla de sesiones activas
-	await prisma.sessionToken.deleteMany({
-		where: { sessionToken: refreshTokenValue },
-	});
 }
 
 export async function logout(userId: string, token: string, fromAllDevices = false) {
