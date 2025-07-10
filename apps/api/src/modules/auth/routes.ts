@@ -9,6 +9,8 @@ import { authGoogleCallbackSchema, authLoginSchema, authRegisterSchema } from ".
 import { login, register, findOrCreateGoogleUser, createTokens, refreshToken as refreshTokenService, logout, setAuthCookies, createPasswordResetToken, resetPassword, changePassword, revokeSession } from "./services"
 import { getUserById, getUserSessions } from "../users/services";
 
+
+// TODO: Implementar TOTP para mayor seguridad en las rutas de autenticación
 export const authRouter = new Hono()
 	.post("/register",
 		zValidator("json", authRegisterSchema),

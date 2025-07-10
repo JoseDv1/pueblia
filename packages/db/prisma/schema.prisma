@@ -24,8 +24,10 @@ model User {
   addressId String?   @unique
   Address   Address?  @relation(fields: [addressId], references: [id], name: "UserAddress")
 
-  emailVerified Boolean   @default(false) // Para verificación de email
-  lastLoginAt   DateTime? // Para analytics de usuarios
+  // Authentication fields
+  emailVerified    Boolean   @default(false) // Para verificación de email
+  lastLoginAt      DateTime? // Para analytics de usuarios
+  twoFactorEnabled Boolean   @default(false) @map("two_factor_enabled")
 
   // OAuth fields
   image String? @db.Text // URL to the user's profile image (optional)
