@@ -113,7 +113,6 @@ export const authRouter = new Hono()
 			return ctx.json({ message: "Password reset successfully" }, 200);
 		})
 	.post("/password/change",
-		JWTGuard(),
 		zValidator("json", z.object({
 			currentPassword: z.string().min(8),
 			newPassword: z.string().min(8),
@@ -122,7 +121,9 @@ export const authRouter = new Hono()
 			message: "Passwords do not match"
 		}).refine((data) => data.currentPassword !== data.newPassword, {
 			message: "New password must be different from current password"
-		})), async (ctx) => {
+		})),
+		JWTGuard(),
+		async (ctx) => {
 			const { sub: userId } = ctx.get("jwtPayload");
 			const { currentPassword, newPassword } = ctx.req.valid("json");
 			await changePassword(userId, currentPassword, newPassword);

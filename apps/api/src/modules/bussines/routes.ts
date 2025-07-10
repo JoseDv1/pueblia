@@ -2,21 +2,12 @@ import { JWTGuard } from "@/middleware/auth";
 import { zValidator } from "@/middleware/validator";
 import { Hono } from "hono";
 import { bussinesIdSchema, createBussinesSchema, updateBussinesSchema } from "./schema";
-import { addAdminToBussines, createBussines, deleteBussines, getBussines, getBussinesById, updateBussines } from "./services";
+import { addAdminToBussines, createBussines, deleteBussines, getBussines, getBussinesById, getBussinesReviews, toggleBussinesAsFav, updateBussines } from "./services";
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod/v4";
 
 
 export const bussinesRouter = new Hono()
-	.post("/",
-		JWTGuard(),
-		zValidator("json", createBussinesSchema),
-		async (ctx) => {
-			const { name } = ctx.req.valid("json");
-			const { sub: userId } = ctx.get("jwtPayload");
-			const bussines = await createBussines({ name, ownerId: userId });
-			return ctx.json(bussines, 201);
-		})
 	.get("/",
 		async (ctx) => {
 			return ctx.json(await getBussines(), 200);
@@ -27,6 +18,41 @@ export const bussinesRouter = new Hono()
 			const { id } = ctx.req.valid("param");
 			const bussines = await getBussinesById(id);
 			return ctx.json(bussines, 200);
+		})
+	.get("/:id/reviews",
+		zValidator("param", bussinesIdSchema),
+		async (ctx) => {
+			const { id } = ctx.req.valid("param");
+			const { Review: review, ...bussines } = await getBussinesReviews(id);
+
+			return ctx.json({ bussines, reviews: review }, 200);
+		})
+	.post("/:id/favorite",
+		zValidator("param", bussinesIdSchema),
+		JWTGuard(),
+		async (ctx) => {
+			const { id } = ctx.req.valid("param");
+			const { sub: userId } = ctx.get("jwtPayload");
+			const bussines = await toggleBussinesAsFav(id, userId, true);
+			return ctx.json(bussines, 200);
+		})
+	.delete("/:id/favorite",
+		zValidator("param", bussinesIdSchema),
+		JWTGuard(),
+		async (ctx) => {
+			const { id } = ctx.req.valid("param");
+			const { sub: userId } = ctx.get("jwtPayload");
+			const bussines = await toggleBussinesAsFav(id, userId, false);
+			return ctx.json(bussines, 200);
+		})
+	.post("/",
+		JWTGuard(),
+		zValidator("json", createBussinesSchema),
+		async (ctx) => {
+			const { name } = ctx.req.valid("json");
+			const { sub: userId } = ctx.get("jwtPayload");
+			const bussines = await createBussines({ name, ownerId: userId });
+			return ctx.json(bussines, 201);
 		})
 	.delete("/:id",
 		JWTGuard(),

@@ -18,7 +18,6 @@ export const userRoutes = new Hono()
 	})
 	.get("/:userId/sessions",
 		zValidator("param", z.object({ userId: z.cuid2() })),
-		JWTGuard("ADMIN"),
 		async (ctx) => {
 			const { userId } = ctx.req.valid("param");
 			const { Session: sessions, ...user } = await getUserSessions(userId);

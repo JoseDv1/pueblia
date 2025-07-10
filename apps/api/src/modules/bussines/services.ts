@@ -42,3 +42,37 @@ export async function addAdminToBussines(bussinesId: string, userId: string) {
 		}
 	});
 }
+
+export async function getBussinesReviews(bussinesId: string) {
+	return await prisma.business.findUniqueOrThrow({
+		where: { id: bussinesId },
+		include: {
+			Review: {
+				include: {
+					User: {
+						select: {
+							displayName: true,
+							image: true,
+						}
+					}
+				}
+			}
+		}
+	})
+}
+
+export async function toggleBussinesAsFav(bussinesId: string, userId: string, add: boolean) {
+	const action = add ? "connect" : "disconnect";
+	return await prisma.business.update({
+		where: { id: bussinesId },
+		data: {
+			Favorite: {
+				[action]: { id: userId }
+			}
+		},
+		include: {
+			Favorite: true
+		}
+	});
+}
+
