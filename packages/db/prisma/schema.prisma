@@ -270,26 +270,26 @@ model Business {
   loyaltyPoints Int     @default(0) // Puntos de fidelidad del negocio
 
   // Metadata
-  Address            Address?          @relation(fields: [addressId], references: [id], name: "BusinessAddress")
-  isVerified         Boolean           @default(false) @map("is_verified")
-  addressId          String?           @unique
-  isActive           Boolean           @default(true) @map("is_active")
-  deletedAt          DateTime?         @map("deleted_at")
-  createdAt          DateTime          @default(now()) @map("created_at")
-  updatedAt          DateTime          @updatedAt @map("updated_at")
-  businessCategoryId String?
-  BusinessCategory   BusinessCategory? @relation(fields: [businessCategoryId], references: [id], name: "BusinessCategory")
+  isVerified         Boolean   @default(false) @map("is_verified")
+  addressId          String?   @unique
+  isActive           Boolean   @default(true) @map("is_active")
+  deletedAt          DateTime? @map("deleted_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
   openingHours       Json? // Para horarios de atención
-  isOpen             Boolean           @default(false) @map("is_open") // Para saber si está abierto actualmente
+  isOpen             Boolean   @default(false) @map("is_open") // Para saber si está abierto actualmente
   tags               String[] // Para categorización flexible
+  businessCategoryId String?
 
-  ChatParticipant ChatParticipant[] @relation("ChatParticipantBusiness")
-  Notifications   Notification[]    @relation("BusinessNotifications")
-  Commissions     Commission[]      @relation("BusinessCommissions")
-  Services        Services[]        @relation("BusinessServices")
-  Orders          Orders[]          @relation("BusinessOrders")
-  Review          Review[]          @relation("BusinessReviews")
-  Favorite        Favorite[]        @relation("BusinessFavorites")
+  Address          Address?          @relation(fields: [addressId], references: [id], name: "BusinessAddress")
+  BusinessCategory BusinessCategory? @relation(fields: [businessCategoryId], references: [id], name: "BusinessCategory")
+  ChatParticipant  ChatParticipant[] @relation("ChatParticipantBusiness")
+  Notifications    Notification[]    @relation("BusinessNotifications")
+  Commissions      Commission[]      @relation("BusinessCommissions")
+  Services         Services[]        @relation("BusinessServices")
+  Orders           Orders[]          @relation("BusinessOrders")
+  Review           Review[]          @relation("BusinessReviews")
+  Favorite         Favorite[]        @relation("BusinessFavorites")
 
   @@index([openingHours], type: Gin, name: "idx_business_opening_hours")
   @@index([tags], type: Gin, name: "idx_business_tags")
