@@ -1,16 +1,18 @@
 import { JWTGuard } from "@/middleware/auth";
 import { zValidator } from "@/middleware/validator";
 import { Hono } from "hono";
-import { bussinesIdSchema, createBussinesSchema, updateBussinesSchema } from "./schema";
+import { bussinesIdSchema, createBussinesSchema, updateBussinesSchema, bussinesListQuerySchema } from "./schema";
 import { addAdminToBussines, createBussines, deleteBussines, getBussines, getBussinesById, getBussinesReviews, toggleBussinesAsFav, updateBussines } from "./services";
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod/v4";
 
-
 export const bussinesRouter = new Hono()
 	.get("/",
+		zValidator("query", bussinesListQuerySchema),
 		async (ctx) => {
-			return ctx.json(await getBussines(), 200);
+			const queryParams = ctx.req.valid("query");
+			const result = await getBussines(queryParams);
+			return ctx.json(result, 200);
 		})
 	.get("/:id",
 		zValidator("param", bussinesIdSchema),

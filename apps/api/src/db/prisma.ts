@@ -7,3 +7,5 @@ export const prisma = new PrismaClient({
 		}
 	}
 })
+
+export type { BusinessWhereInput, BusinessOrderByWithRelationInput } from "../../../../packages/db/generated/prisma/models"
