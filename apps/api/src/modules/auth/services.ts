@@ -31,6 +31,73 @@ export async function createTokens(userId: string, role: $Enums.UserRole) {
 	};
 }
 
+export async function createPasswordResetToken(email: string) {
+	const user = await prisma.user.findUniqueOrThrow({
+		where: { email },
+		select: { id: true, email: true, emailVerified: true },
+	});
+
+	if (!user.emailVerified) {
+		throw new HTTPException(400, { message: "Email not verified" });
+	}
+
+	const resetToken = await jwt.sign({ sub: user.id, email: user.email, iat: Math.floor(Date.now() / 1000) }, JWT_SECRET!);
+
+	return await prisma.passwordResetToken.create({
+		data: {
+			userId: user.id,
+			token: resetToken,
+			expiresAt: new Date(Date.now() + 60 * 15 * 1000), // 15 minutes expiration
+		}
+	});
+}
+
+export async function resetPassword(token: string, newPassword: string) {
+	const { sub, email } = await jwt.verify(token, JWT_SECRET!) as { sub: string; email: string };
+	if (!sub || !email) throw new HTTPException(401, {
+		message:
+			"Invalid token payload"
+	});
+
+	const user = await prisma.user.findUniqueOrThrow({
+		where: { id: sub },
+		select: { id: true, email: true }
+	});
+
+	if (email !== user.email) throw new HTTPException(401, { message: "Token does not match user email" });
+
+	const hashedPassword = await Bun.password.hash(newPassword, HASHING_OPTIONS);
+	await prisma.user.update({
+		where: { id: user.id },
+		data: {
+			hashedPassword,
+			emailVerified: true,
+		},
+	})
+
+}
+
+export const changePassword = async (userId: string, currentPassword: string, newPassword: string) => {
+	const user = await prisma.user.findUniqueOrThrow({
+		where: { id: userId },
+		select: { id: true, hashedPassword: true },
+	});
+
+	if (!user.hashedPassword) throw new HTTPException(400, { message: "User does not have a password set" });
+
+	const isValidPassword = await Bun.password.verify(currentPassword, user.hashedPassword, HASHING_OPTIONS.algorithm);
+	if (!isValidPassword) throw new HTTPException(401, { message: "Current password is incorrect" });
+	const hashedPassword = await Bun.password.hash(newPassword, HASHING_OPTIONS);
+	await prisma.user.update({
+		where: { id: user.id },
+		data: {
+			hashedPassword,
+		},
+	});
+}
+
+
+
 export async function login(email: string, password: string) {
 	const userToValidate = await prisma.user.findUniqueOrThrow({
 		where: { email },
@@ -198,9 +265,18 @@ export async function blacklistToken(refreshTokenValue: string, userId: string) 
 	});
 }
 
-export async function logout(userId: string, token: string) {
-	await prisma.sessionToken.delete({
-		where: { sessionToken: token, userId },
+export async function logout(userId: string, token: string, fromAllDevices = false) {
+	return fromAllDevices ? await prisma.sessionToken.deleteMany({
+		where: { userId }
+	}) : await prisma.sessionToken.delete({
+		where: { sessionToken: token }
+	});
+}
+
+export async function revokeSession(sessionId: string, userId: string) {
+	return await prisma.sessionToken.delete({
+		where: { id: sessionId, userId },
+		select: { id: true }
 	});
 }
 

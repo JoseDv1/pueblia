@@ -6,6 +6,15 @@ export async function getUserById(userId: string) {
 	})
 }
 
+export async function getUserSessions(userId: string) {
+	return await prisma.user.findUniqueOrThrow({
+		where: { id: userId },
+		include: {
+			Session: true
+		}
+	});
+}
+
 export async function getAllUsers() {
 	return await prisma.user.findMany()
 }
