@@ -46,7 +46,7 @@ export const authRouter = new Hono()
 			throw new HTTPException(500, { message: "Failed to refresh token" });
 		}
 	})
-	.get("/google", (ctx) => {
+	.get("/oauth/google", (ctx) => {
 		if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) throw new HTTPException(500, { message: "Google OAuth not configured" });
 
 		const state = crypto.randomUUID();
