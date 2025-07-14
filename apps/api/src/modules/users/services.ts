@@ -23,7 +23,8 @@ export async function softDelete(userId: string) {
 	return await prisma.user.update({
 		where: { id: userId },
 		data: {
-			isActive: false
+			isActive: false,
+			deletedAt: new Date()
 		}
 	})
 }

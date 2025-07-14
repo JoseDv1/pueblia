@@ -758,7 +758,7 @@ app.get("/protected", authMiddleware, handler);
 
 ```typescript
 // Protege rutas por rol
-app.get("/admin", authMiddleware, requireRole(["ADMIN"]), handler);
+app.get("/admin", authMiddleware, requireRole([UserRole.ADMIN]), handler);
 ```
 
 ### `optionalAuthMiddleware`

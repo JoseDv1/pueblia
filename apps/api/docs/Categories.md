@@ -93,7 +93,7 @@ Obtiene una categoría específica por su ID.
 Crea una nueva categoría en el sistema.
 
 **Autenticación:** Requerida (Rol: ADMIN)
-**Middleware:** `JWTGuard("ADMIN")`
+**Middleware:** `JWTGuard(UserRole.ADMIN)`
 
 **Body:**
 
@@ -134,7 +134,7 @@ Crea una nueva categoría en el sistema.
 Actualiza una categoría existente.
 
 **Autenticación:** Requerida (Rol: ADMIN)
-**Middleware:** `JWTGuard("ADMIN")`
+**Middleware:** `JWTGuard(UserRole.ADMIN)`
 
 **Parameters:**
 
@@ -180,7 +180,7 @@ Actualiza una categoría existente.
 Elimina una categoría del sistema.
 
 **Autenticación:** Requerida (Rol: ADMIN)
-**Middleware:** `JWTGuard("ADMIN")`
+**Middleware:** `JWTGuard(UserRole.ADMIN)`
 
 **Parameters:**
 
@@ -427,7 +427,7 @@ Promise<BusinessCategory>;
 
 ## Middleware de Seguridad
 
-### `JWTGuard("ADMIN")`
+### `JWTGuard(UserRole.ADMIN)`
 
 Aplicado a rutas de escritura (POST, PATCH, DELETE).
 

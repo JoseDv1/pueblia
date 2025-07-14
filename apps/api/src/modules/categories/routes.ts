@@ -3,6 +3,7 @@ import { createCategory, deleteCategory, getCategories, getCategoryById, updateC
 import { zValidator } from "@/middleware/validator";
 import { categoriesIdSchema, createCategorySchema, updateCategorySchema } from "./schema";
 import { JWTGuard } from "@/middleware/auth";
+import { UserRole } from "@/db/prisma";
 
 
 
@@ -18,7 +19,7 @@ export const categoriesRouter = new Hono()
 			const category = await getCategoryById(id);
 			return ctx.json(category, 200);
 		})
-	.use(JWTGuard("ADMIN"))
+	.use(JWTGuard(UserRole.ADMIN))
 	.post("/",
 		zValidator("json", createCategorySchema),
 		async (ctx) => {

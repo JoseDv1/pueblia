@@ -9,3 +9,4 @@ export const prisma = new PrismaClient({
 })
 
 export type { BusinessWhereInput, BusinessOrderByWithRelationInput } from "../../../../packages/db/generated/prisma/models"
+export { UserRole, OrderStatus } from "../../../../packages/db/generated/prisma/enums"
