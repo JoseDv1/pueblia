@@ -1,4 +1,4 @@
-import { prisma, type BusinessWhereInput } from "@/db/prisma";
+import { OrderStatus, prisma, type BusinessWhereInput } from "@/db/prisma";
 import type { CreateBussinesSchema, UpdateBussinesSchema, BussinesListQuerySchema } from "./schema";
 
 
@@ -106,6 +106,16 @@ export async function getBussines(filters?: BussinesListQuerySchema) {
 	};
 }
 
+export async function getBussinesByUserId(userId: string) {
+	return await prisma.business.findMany({
+		where: { OR: [{ ownerId: userId }, { AdminsUsers: { some: { id: userId } } }] },
+		include: {
+			AdminsUsers: true
+		}
+	});
+
+}
+
 export async function getBussinesById(id: string) {
 	return await prisma.business.findUniqueOrThrow({
 		where: { id },
@@ -115,11 +125,28 @@ export async function getBussinesById(id: string) {
 	});
 }
 
-export async function deleteBussines(id: string) {
-	return await prisma.business.delete({
-		where: { id }
+export async function getAdminsInBussines(bussinesId: string) {
+	return await prisma.business.findUniqueOrThrow({
+		where: { id: bussinesId },
+		include: {
+			AdminsUsers: {
+				select: {
+					id: true,
+					displayName: true,
+					image: true
+				}
+			}
+		}
 	});
 }
+
+export async function blockBussines(id: string) {
+	return await prisma.business.update({
+		where: { id },
+		data: { isActive: false }
+	});
+}
+
 
 export async function updateBussines(id: string, data: UpdateBussinesSchema) {
 	return await prisma.business.update({
@@ -128,16 +155,17 @@ export async function updateBussines(id: string, data: UpdateBussinesSchema) {
 	});
 }
 
-export async function addAdminToBussines(bussinesId: string, userId: string) {
+export async function modifyAdminInBussines(bussinesId: string, userId: string, add: boolean = true) {
 	return await prisma.business.update({
 		where: { id: bussinesId },
 		data: {
 			AdminsUsers: {
-				connect: { id: userId }
+				[add ? "connect" : "disconnect"]: { id: userId }
 			}
 		}
 	});
 }
+
 
 export async function getBussinesReviews(bussinesId: string) {
 	return await prisma.business.findUniqueOrThrow({
@@ -172,3 +200,30 @@ export async function toggleBussinesAsFav(bussinesId: string, userId: string, ad
 	});
 }
 
+
+// ----------- Orders -----------
+export async function getBussinesOrders(bussinesId: string) {
+	return await prisma.business.findUniqueOrThrow({
+		where: { id: bussinesId },
+		include: {
+			Orders: {
+				include: {
+					user: {
+						select: {
+							id: true,
+							displayName: true,
+							image: true
+						}
+					}
+				}
+			}
+		}
+	});
+}
+
+export async function changeOrderStatus(orderId: string, status: OrderStatus) {
+	return await prisma.orders.update({
+		where: { id: orderId },
+		data: { status }
+	});
+}
