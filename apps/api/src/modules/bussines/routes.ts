@@ -116,6 +116,14 @@ export const bussinesRouter = new Hono()
 			return ctx.status(204);
 		})
 	// ------- Admin management routes -------
+	.get("/:id/admins",
+		JWTGuard(),
+		zValidator("param", bussinesIdSchema),
+		async (ctx) => {
+			const { id } = ctx.req.valid("param");
+			const admins = await getAdminsInBussines(id);
+			return ctx.json(admins, 200);
+		})
 	.post("/:id/admins",
 		JWTGuard(),
 		zValidator("param", bussinesIdSchema),
@@ -170,6 +178,8 @@ export const bussinesRouter = new Hono()
 
 			return ctx.json(updatedBussines, 200);
 		})
+	// ----  Services/Offers management routes ----
+	// TODO: Implement services and offers management routes
 
 	// ------- Orders management routes -------
 	.get("/:id/orders",
@@ -218,8 +228,12 @@ export const bussinesRouter = new Hono()
 			const updatedOrder = await changeOrderStatus(orderId, status);
 			return ctx.json(updatedOrder, 200);
 
-		}) //TODO: Implement Commisions
+		})
+	// TODO: Implement Commisions
+	// TODO: Implement Chat management routes
+	// TODO: Implement Notifications 
 	// -------- ADMIN ROLE ROUTES --------
+
 	.use(JWTGuard(UserRole.ADMIN))
 	.post("/:id/block",
 		zValidator("param", bussinesIdSchema),
@@ -228,6 +242,8 @@ export const bussinesRouter = new Hono()
 			const blockedBussines = await blockBussines(id);
 			return ctx.json(blockedBussines, 200);
 		})
+// /admin/businesses/:id/approve 
+// /businesses/:id/analytics
 
 
 
