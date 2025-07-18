@@ -6,6 +6,7 @@ import { blockBussines, changeOrderStatus, createBussines, getAdminsInBussines, 
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod/v4";
 import { OrderStatus, UserRole } from "@/db/prisma";
+import { servicesRouter } from "../services/routes";
 
 export const bussinesRouter = new Hono()
 	.get("/",
@@ -179,8 +180,7 @@ export const bussinesRouter = new Hono()
 			return ctx.json(updatedBussines, 200);
 		})
 	// ----  Services/Offers management routes ----
-	// TODO: Implement services and offers management routes
-
+	.route("/", servicesRouter)
 	// ------- Orders management routes -------
 	.get("/:id/orders",
 		JWTGuard(),
@@ -242,8 +242,8 @@ export const bussinesRouter = new Hono()
 			const blockedBussines = await blockBussines(id);
 			return ctx.json(blockedBussines, 200);
 		})
-// /admin/businesses/:id/approve 
-// /businesses/:id/analytics
+// TODO: /admin/businesses/:id/approve 
+// TODO: /businesses/:id/analytics
 
 
 
