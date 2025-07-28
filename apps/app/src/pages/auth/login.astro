@@ -73,6 +73,7 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 <script>
 	import Alpine from "alpinejs";
 	import { API_URL } from "@/services/constants";
+	import { navigate } from "astro:transitions/client";
 
 	document.addEventListener("alpine:init", () => {
 		Alpine.data("loginForm", () => ({
@@ -89,7 +90,7 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 				};
 
 				await login(data.email, data.password);
-				alert("Inicio de sesión exitoso.");
+				navigate("/");
 			},
 		}));
 	});

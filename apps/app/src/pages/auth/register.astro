@@ -11,14 +11,19 @@ import EyeIcon from "@/assets/icons/eye.svg";
 
 		<h1 transition:name="title">Registrarse</h1>
 
-		<form transition:name="form">
+		<form
+			transition:name="form"
+			x-data="registerForm"
+			@submit.prevent="handleRegister"
+		>
 			<label transition:name="name-label">
 				<span>Nombre Completo:</span>
 				<input
 					type="text"
 					placeholder="Juan Pérez"
 					required
-					name="full-name"
+					name="name"
+					autocomplete="name"
 					transition:name="name-input"
 				/>
 			</label>
@@ -31,6 +36,7 @@ import EyeIcon from "@/assets/icons/eye.svg";
 					required
 					name="email"
 					transition:name="email-input"
+					autocomplete="email"
 				/>
 			</label>
 
@@ -38,13 +44,18 @@ import EyeIcon from "@/assets/icons/eye.svg";
 				<span>Contraseña:</span>
 				<div transition:name="password-container">
 					<input
-						type="password"
-						placeholder="********"
+						:type="showPassword ? 'text' : 'password'"
+						:placeholder="showPassword ? 'Contraseña' : '********'"
 						required
 						name="password"
 						transition:name="password-input"
+						autocomplete="new-password"
 					/>
-					<span class="eye" transition:name="password-eye">
+					<span
+						class="eye"
+						transition:name="password-eye"
+						@click="showPassword = !showPassword"
+					>
 						<EyeIcon width={24} height={24} />
 					</span>
 				</div>
@@ -54,13 +65,17 @@ import EyeIcon from "@/assets/icons/eye.svg";
 				<span>Confirmar Contraseña:</span>
 				<div transition:name="confirm-password-container">
 					<input
-						type="password"
-						placeholder="********"
+						:type="showConfirmPassword ? 'text' : 'password'"
+						:placeholder="showConfirmPassword ? 'Confirmar Contraseña' : '********'"
 						required
-						name="confirm-password"
+						name="confirmPassword"
 						transition:name="confirm-password-input"
 					/>
-					<span class="eye" transition:name="confirm-password-eye">
+					<span
+						class="eye"
+						transition:name="confirm-password-eye"
+						@click="showConfirmPassword = !showConfirmPassword"
+					>
 						<EyeIcon width={24} height={24} />
 					</span>
 				</div>
@@ -73,6 +88,7 @@ import EyeIcon from "@/assets/icons/eye.svg";
 					placeholder="Juan123"
 					name="username"
 					transition:name="username-input"
+					required
 				/>
 			</label>
 
@@ -95,6 +111,61 @@ import EyeIcon from "@/assets/icons/eye.svg";
 		</p>
 	</main>
 </Layout>
+
+<script>
+	import Alpine from "alpinejs";
+	import { API_URL } from "@/services/constants";
+	import { navigate } from "astro:transitions/client";
+
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("registerForm", () => ({
+			showPassword: false,
+			showConfirmPassword: false,
+
+			async handleRegister(e: SubmitEvent) {
+				e.preventDefault();
+				const form = e.target as HTMLFormElement;
+				const formData = new FormData(form);
+
+				// Pass formData to JSON
+				const data = Object.fromEntries(formData.entries()) as {
+					name: string;
+					email: string;
+					password: string;
+					confirmPassword: string;
+					username: string;
+				};
+
+				await register(data);
+				navigate("/")
+			},
+		}));
+	});
+
+	async function register(data: {
+		name: string;
+		email: string;
+		password: string;
+		confirmPassword: string;
+		username: string;
+	}) {
+		const res = await fetch(`${API_URL}/api/v1/auth/register`, {
+			method: "POST",
+			credentials: "include", // Include cookies for session management
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		});
+
+		const resData = await res.json();
+		if (!res.ok) {
+		}
+
+		console.log("Login successful", resData);
+		return resData;
+	}
+</script>
 
 <style>
 	body {
@@ -137,6 +208,7 @@ import EyeIcon from "@/assets/icons/eye.svg";
 	label {
 		display: flex;
 		flex-direction: column;
+		user-select: none;
 	}
 
 	label > span {
