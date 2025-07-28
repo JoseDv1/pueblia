@@ -3,6 +3,7 @@
 	margin: 0;
 	padding: 0;
 	position: relative;
+
 }
 
 img {
@@ -14,6 +15,7 @@ img {
 	background-size: cover;
 	shape-margin: 1rem;
 }
+
 
 a {
 	text-decoration: none;

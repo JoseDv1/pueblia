@@ -1,8 +1,16 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { cors } from "hono/cors";
 import { mainRouterV1 } from "./router";
+import { logger } from "hono/logger";
 
 export const server = new Hono()
+
+	.use(cors({
+		origin: ["http://localhost:4322", "*"], // Allow requests from the frontend and any other origin
+		credentials: true, // Allow credentials to be sent with requests
+	}))
+	.use(logger()) // Use the logger middleware for development
 	.route("/api/v1", mainRouterV1)
 
 server.onError((error, ctx) => {

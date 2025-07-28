@@ -6,8 +6,9 @@ import alpinejs from "@astrojs/alpinejs";
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [themeToggler, alpinejs()],
-    server: {
-        port: 4322,
-    },
+	integrations: [themeToggler, alpinejs()],
+
+	server: {
+		port: 4322,
+	},
 });

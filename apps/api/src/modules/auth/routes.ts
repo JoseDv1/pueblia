@@ -192,7 +192,8 @@ export const authRouter = new Hono()
 					}),
 				});
 				if (!tokenResponse.ok) throw new HTTPException(400, { message: "Failed to exchange code for token" });
-				const tokenData = await tokenResponse.json();
+				const tokenData = await tokenResponse.json() as { access_token: string; id_token: string };
+
 				const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
 					headers: {
 						Authorization: `Bearer ${tokenData.access_token}`,
@@ -200,7 +201,12 @@ export const authRouter = new Hono()
 				});
 				if (!userResponse.ok) throw new HTTPException(400, { message: "Failed to get user info from Google" });
 
-				const googleUser = await userResponse.json();
+				const googleUser = await userResponse.json() as {
+					id: string;
+					email: string;
+					name: string;
+					picture: string;
+				};
 				const user = await findOrCreateGoogleUser({
 					id: googleUser.id,
 					email: googleUser.email,

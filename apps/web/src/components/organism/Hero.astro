@@ -36,11 +36,11 @@ const floatingCards: FloatingCard[] = [
 ];
 
 const title = `Descubre y potencia lo mejor de
-				<span class="highlight-text">Guatapé</span>
+				<span class="highlight-text font-baloo">Guatapé</span>
 				en un solo lugar`;
-const subtitle = `<span class="highlight-text">Experiencias auténticas</span> para cada visitante.
+const subtitle = `<span class="highlight-text font-baloo">Experiencias auténticas</span> para cada visitante.
 				<br />
-				<span class="highlight-text"
+				<span class="highlight-text font-baloo"
 					>Visibilidad, conversión y fidelización</span
 				> para tu negocio.`;
 
@@ -53,7 +53,7 @@ const image = {
 <section id="hero">
 	<main class="hero-content">
 		<div class="hero-text">
-			<h1>Pueblía</h1>
+			<h1 class="font-baloo">Pueblía</h1>
 			<h2 set:html={title} />
 			<p set:html={subtitle} />
 			<CTAGroup ctas={heroCTAs} />
@@ -114,7 +114,6 @@ const image = {
 
 	h2 {
 		font-size: clamp(2.5rem, 5vw, 4rem);
-		font-weight: 800;
 		line-height: 1.2;
 		margin-bottom: 1.5rem;
 		color: var(--text-color);
@@ -129,10 +128,6 @@ const image = {
 		animation: slideInUp 0.8s ease-out 0.4s both;
 	}
 
-	h2 :global(.highlight-text) {
-		font-weight: 800;
-	}
-
 	.btn-icon {
 		font-size: 1.2rem;
 	}
@@ -142,18 +137,12 @@ const image = {
 		animation: slideInRight 0.8s ease-out 0.4s both;
 	}
 
-	picture {
-		position: relative;
-		width: 100%;
-		height: 400px;
-	}
-
 	img {
-		width: 100%;
-		height: 100%;
+		width: 800px;
+		aspect-ratio: 1;
 		border-radius: var(--border-radius);
 		overflow: hidden;
-		box-shadow: 0 10px 40px var(--shadow-color);
+		filter: drop-shadow(0 10px 40px var(--shadow-color));
 		position: relative;
 	}
 

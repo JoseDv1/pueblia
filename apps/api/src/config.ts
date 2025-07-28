@@ -1,3 +1,5 @@
+import type { CookieOptions } from "hono/utils/cookie";
+
 export const PORT = Bun.env.PORT ?? 3000;
 
 export const HASHING_OPTIONS = {
@@ -30,4 +32,10 @@ export const COOKIES = {
 	refreshToken: "refresh_token",
 	oauthState: "oauth_state",
 	passwordResetToken: "password_reset_token",
+}
+
+export const COOKIE_OPTIONS: CookieOptions = {
+	sameSite: "Lax",
+	secure: process.env.NODE_ENV === "production",
+	httpOnly: true,
 }

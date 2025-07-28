@@ -7,6 +7,8 @@ import EyeIcon from "@/assets/icons/eye.svg";
 
 <Layout title="Registro">
 	<main transition:name="main">
+		<img src="/favicon.svg" alt="Logo" transition:name="logo" />
+
 		<h1 transition:name="title">Registrarse</h1>
 
 		<form transition:name="form">
@@ -118,6 +120,12 @@ import EyeIcon from "@/assets/icons/eye.svg";
 		border-radius: 0.5rem;
 		width: clamp(300px, 90%, 500px);
 		background-color: var(--middle-color);
+	}
+
+	main img {
+		width: 100px;
+		height: 100px;
+		margin: 0 auto;
 	}
 
 	form {

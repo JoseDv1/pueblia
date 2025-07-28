@@ -1,4 +1,4 @@
-import { COOKIES, HASHING_OPTIONS, JWT_ACCESS_EXPIRATION, JWT_REFRESH_EXPIRATION, JWT_SECRET } from "@/config";
+import { COOKIES, HASHING_OPTIONS, JWT_ACCESS_EXPIRATION, JWT_REFRESH_EXPIRATION, JWT_SECRET, COOKIE_OPTIONS } from "@/config";
 import { prisma } from "@/db/prisma";
 import { HTTPException } from "hono/http-exception";
 import type { $Enums } from "../../../../../packages/db/generated/prisma/client";
@@ -260,6 +260,6 @@ export async function revokeSession(sessionId: string, userId: string) {
 }
 
 export async function setAuthCookies(ctx: Context, { accessToken, refreshToken }: { accessToken: string; refreshToken: string }) {
-	setCookie(ctx, COOKIES.accessToken, accessToken, { httpOnly: true, sameSite: "Lax", maxAge: JWT_ACCESS_EXPIRATION() - Math.floor(Date.now() / 1000), path: "/" });
-	setCookie(ctx, COOKIES.refreshToken, refreshToken, { httpOnly: true, sameSite: "Lax", maxAge: JWT_REFRESH_EXPIRATION() - Math.floor(Date.now() / 1000), path: "/" });
+	setCookie(ctx, COOKIES.accessToken, accessToken, { ...COOKIE_OPTIONS, maxAge: JWT_ACCESS_EXPIRATION() - Math.floor(Date.now() / 1000) });
+	setCookie(ctx, COOKIES.refreshToken, refreshToken, { ...COOKIE_OPTIONS, maxAge: JWT_REFRESH_EXPIRATION() - Math.floor(Date.now() / 1000) });
 }

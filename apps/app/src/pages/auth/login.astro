@@ -8,6 +8,8 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 
 <Layout title="Login">
 	<main transition:name="main">
+		<img src="/favicon.svg" alt="Logo" transition:name="logo" />
+
 		<h1 transition:name="title">Iniciar Sesión</h1>
 
 		<form
@@ -70,11 +72,12 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 
 <script>
 	import Alpine from "alpinejs";
+	import { API_URL } from "@/services/constants";
 
 	document.addEventListener("alpine:init", () => {
 		Alpine.data("loginForm", () => ({
 			showPassword: false,
-			handleLogin(e: SubmitEvent) {
+			async handleLogin(e: SubmitEvent) {
 				e.preventDefault();
 				const form = e.target as HTMLFormElement;
 				const formData = new FormData(form);
@@ -85,14 +88,29 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 					password: string;
 				};
 
-				login(data.email, data.password);
+				await login(data.email, data.password);
 				alert("Inicio de sesión exitoso.");
 			},
 		}));
 	});
 
-	function login(username: string, password: string) {
-		console.log("Logging in with:", { username, password });
+	async function login(username: string, password: string) {
+		const res = await fetch(`${API_URL}/api/v1/auth/login`, {
+			method: "POST",
+			credentials: "include", // Include cookies for session management
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email: username, password }),
+		});
+
+		const data = await res.json();
+		if (!res.ok) {
+			throw new Error(data.message || "Error al iniciar sesión");
+		}
+
+		console.log("Login successful", data);
+		return data;
 	}
 </script>
 
@@ -120,6 +138,12 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 		border-radius: 0.5rem;
 		width: clamp(300px, 90%, 500px);
 		background-color: var(--middle-color);
+	}
+
+	main img {
+		width: 100px;
+		height: 100px;
+		margin: 0 auto;
 	}
 
 	form {
