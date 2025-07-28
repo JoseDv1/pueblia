@@ -1,0 +1,181 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Button from "@/components/atoms/Button.astro";
+import Google from "@/assets/icons/google.svg";
+import EyeIcon from "@/assets/icons/eye.svg";
+---
+
+<Layout title="Registro">
+	<main transition:name="main">
+		<h1 transition:name="title">Registrarse</h1>
+
+		<form transition:name="form">
+			<label transition:name="name-label">
+				<span>Nombre Completo:</span>
+				<input
+					type="text"
+					placeholder="Juan Pérez"
+					required
+					name="full-name"
+					transition:name="name-input"
+				/>
+			</label>
+
+			<label transition:name="email-label">
+				<span>Email: </span>
+				<input
+					type="email"
+					placeholder="example@example.com"
+					required
+					name="email"
+					transition:name="email-input"
+				/>
+			</label>
+
+			<label transition:name="password-label">
+				<span>Contraseña:</span>
+				<div transition:name="password-container">
+					<input
+						type="password"
+						placeholder="********"
+						required
+						name="password"
+						transition:name="password-input"
+					/>
+					<span class="eye" transition:name="password-eye">
+						<EyeIcon width={24} height={24} />
+					</span>
+				</div>
+			</label>
+
+			<label transition:name="confirm-password-label">
+				<span>Confirmar Contraseña:</span>
+				<div transition:name="confirm-password-container">
+					<input
+						type="password"
+						placeholder="********"
+						required
+						name="confirm-password"
+						transition:name="confirm-password-input"
+					/>
+					<span class="eye" transition:name="confirm-password-eye">
+						<EyeIcon width={24} height={24} />
+					</span>
+				</div>
+			</label>
+
+			<label transition:name="username-label">
+				<span>Nombre de Usuario: </span>
+				<input
+					type="text"
+					placeholder="Juan123"
+					name="username"
+					transition:name="username-input"
+				/>
+			</label>
+
+			<Button variant="primary" transition:name="primary-button"
+				>Registrarse</Button
+			>
+		</form>
+
+		<hr transition:name="divider" />
+
+		<Button variant="secondary" transition:name="google-button">
+			<Google width={24} height={24} />
+			<span> Iniciar Sesion con Google </span>
+		</Button>
+
+		<p transition:name="switch-text">
+			¿Ya tienes una cuenta? <a href="/auth/login" transition:name="switch-link"
+				>Inicia Sesión</a
+			>
+		</p>
+	</main>
+</Layout>
+
+<style>
+	body {
+		min-height: 100dvh;
+		display: grid;
+		place-items: center;
+		background: radial-gradient(
+			circle at center,
+			var(--background-color),
+			var(--middle-color)
+		);
+	}
+
+	main h1 {
+		text-align: center;
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-lg);
+		padding: 2rem 4rem;
+		border-radius: 0.5rem;
+		width: clamp(300px, 90%, 500px);
+		background-color: var(--middle-color);
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-md);
+	}
+
+	label {
+		display: flex;
+		flex-direction: column;
+	}
+
+	label > span {
+		margin-bottom: 0.25rem;
+		font-weight: bold;
+	}
+
+	input {
+		padding: 0.5rem 0.75rem;
+		border-radius: 0.75rem;
+		border: none;
+
+		outline: 1px solid var(--border-color);
+		background-color: var(--background-color);
+		transition: border-color 0.2s ease-in-out;
+		width: 100%;
+
+		&:focus {
+			border-color: var(--primary);
+			outline: none;
+		}
+
+		&::placeholder {
+			color: var(--text-muted);
+		}
+	}
+
+	button {
+		justify-content: center;
+	}
+
+	main > p {
+		text-align: center;
+	}
+
+	a {
+		color: var(--primary-dark);
+	}
+
+	.eye {
+		position: absolute;
+		right: 0.75rem;
+	}
+
+	label div {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+</style>

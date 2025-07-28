@@ -1,0 +1,50 @@
+---
+interface Props {
+	href: string;
+	className?: string[];
+	variant?:
+		| "primary"
+		| "secondary"
+		| "danger"
+		| "warning"
+		| "success"
+		| "info"
+		| "neutral";
+	light?: "light" | "dark";
+}
+
+const { href, className, variant = "neutral", light, ...rest } = Astro.props;
+
+const finalStyle = light ? `${variant}-${light}` : variant;
+---
+
+<a {href} class="btn shine" class:list={[finalStyle, className]} {...rest}>
+	<slot />
+</a>
+<style
+	define:vars={{
+		variant: `var(--${finalStyle})`,
+	}}
+>
+	.btn {
+		background-color: var(--variant);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+
+		padding: 1rem 1.5rem;
+		border: none;
+		border-radius: var(--border-radius);
+		font-size: 1rem;
+		font-weight: 600;
+		text-decoration: none;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		overflow: hidden;
+
+		&:hover {
+			transform: translateY(-2px);
+		}
+	}
+</style>

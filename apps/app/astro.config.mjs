@@ -2,10 +2,12 @@
 import { defineConfig } from "astro/config";
 import themeToggler from "../../packages/toolbar-app/integration.ts";
 
+import alpinejs from "@astrojs/alpinejs";
+
 // https://astro.build/config
 export default defineConfig({
-	integrations: [themeToggler],
-	server: {
-		port: 4322,
-	},
+    integrations: [themeToggler, alpinejs()],
+    server: {
+        port: 4322,
+    },
 });

@@ -86,6 +86,10 @@ body {
 	position: absolute;
 }
 
+.text-muted,
+.text-disabled {
+	color: var(--text-muted);
+}
 .shine {
 	position: relative;
 	overflow: hidden;

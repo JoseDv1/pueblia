@@ -6,7 +6,14 @@ import themeToggler from "../../packages/toolbar-app/integration.ts";
 export default defineConfig({
 	integrations: [themeToggler],
 	i18n: {
-		locales: ['es', 'en'],
-		defaultLocale: 'es',	
-	}
+		locales: ["es", "en"],
+		defaultLocale: "es",
+	},
+	vite: {
+		server: {
+			proxy: {
+				"/api": "http://localhost:3000",
+			},
+		},
+	},
 });

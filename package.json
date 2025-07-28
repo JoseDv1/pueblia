@@ -16,9 +16,9 @@
 		"build:api": "cd apps/api && bun run build",
 		"build:web": "cd apps/web && bun run build",
 		"build:app": "cd apps/app && bun run build",
-		"db:generate": "cd apps/api && bun run db:generate",
-		"db:migrate": "cd apps/api && bun run db:migrate",
-		"db:studio": "cd apps/api && bun run db:studio",
+		"db:generate": "cd packages/db && bunx prisma generate",
+		"db:migrate": "cd packages/db && bunx prisma migrate dev",
+		"db:studio": "cd packages/db && bunx prisma studio",
 		"lint": "bun oxlint@latest",
 		"lint:fix": "bun oxlint@latest --fix"
 	},
