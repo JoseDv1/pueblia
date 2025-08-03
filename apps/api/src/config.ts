@@ -35,7 +35,9 @@ export const COOKIES = {
 }
 
 export const COOKIE_OPTIONS: CookieOptions = {
-	sameSite: "Lax",
-	secure: process.env.NODE_ENV === "production",
+	secure: true,
 	httpOnly: true,
+	sameSite: "None",
+
+
 }
