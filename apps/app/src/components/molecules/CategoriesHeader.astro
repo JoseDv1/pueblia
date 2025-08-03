@@ -1,0 +1,39 @@
+---
+import CategoryCircle from "@/components/atoms/CategoryCircle.astro";
+import type { BusinessCategory } from "@/types";
+
+interface Props {
+	categories: BusinessCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<section>
+	{
+		categories &&
+			categories.map((category) => <CategoryCircle category={category} />)
+	}
+</section>
+
+<style>
+	section {
+		display: flex;
+		gap: var(--spacing-md);
+		padding: var(--spacing-lg);
+		overflow-x: scroll;
+	}
+
+	section a {
+		text-decoration: none;
+	}
+
+	section::-webkit-scrollbar {
+		display: none;
+	}
+
+	section {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+</style>

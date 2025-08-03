@@ -1,19 +1,34 @@
 ---
 import Navbar from "@/components/molecules/Navbar.astro";
 import Layout from "@/layouts/Layout.astro";
+import Searchbar from "@/components/molecules/Searchbar.astro";
 import { isAuthenticated } from "@/lib/auth";
+import CategoriesHeader from "@/components/molecules/CategoriesHeader.astro";
+import type { BusinessCategory } from "@/types";
+import { API_URL } from "@/services/constants";
 
 const authenticated = isAuthenticated(Astro);
 if (!authenticated) return Astro.redirect("/auth/login");
+
+async function getCategories(): Promise<BusinessCategory[]> {
+	const res = await fetch(`${API_URL}/api/v1/categories`);
+	const data = await res.json();
+	return data;
+}
+
+const categories = await getCategories();
 ---
 
 <Layout title="Pueblia">
 	<Navbar />
-	<section>
-		<!-- Searchbar -->
-
-		<!-- Categories Circle -->
-	</section>
+	<header>
+		<Searchbar />
+		<CategoriesHeader categories={categories} />
+	</header>
 </Layout>
 
-<style></style>
+<style>
+	header {
+		padding: var(--spacing-lg);
+	}
+</style>

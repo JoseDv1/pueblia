@@ -1,0 +1,45 @@
+---
+import type { BusinessCategory } from "@/types";
+
+interface Props {
+	category: BusinessCategory;
+}
+
+const { category } = Astro.props;
+---
+
+<a href={`/category/${category.id}`}>
+	<img src={category.imageUrl} alt={category.name} />
+	<span>{category.name}</span>
+</a>
+
+<style>
+	a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-decoration: none;
+		color: var(--text-color);
+		transition: transform var(--transition-duration);
+	}
+
+	a:hover {
+		transform: scale(1.05);
+	}
+
+	img {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		object-fit: cover;
+		margin-bottom: var(--spacing-sm);
+		border: 2px solid var(--border-color);
+	}
+
+	span {
+		font-size: 0.875rem;
+		text-align: center;
+		color: var(--text-muted);
+		font-weight: 500;
+	}
+</style>

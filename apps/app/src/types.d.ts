@@ -1,0 +1,1 @@
+export { BusinessCategory } from "../../../packages/db/generated/prisma/client"

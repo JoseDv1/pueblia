@@ -1,0 +1,49 @@
+<search>
+	<input type="text" placeholder="Buscar..." />
+	<button>Buscar</button>
+</search>
+
+<style>
+	search {
+		display: flex;
+		background-color: var(--top-color);
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		box-shadow: 0 2px 8px var(--shadow-color);
+		transition: border-color var(--transition-duration);
+	}
+
+	search:focus-within {
+		border-color: var(--primary);
+	}
+
+	search input {
+		flex: 1;
+		padding: var(--spacing-md);
+		border: none;
+		background: transparent;
+		color: var(--text-color);
+		outline: none;
+	}
+
+	search input::placeholder {
+		color: var(--text-muted);
+	}
+
+	search button {
+		padding: var(--spacing-md) var(--spacing-lg);
+		background-color: var(--primary);
+		color: var(--top-color);
+		border: none;
+		cursor: pointer;
+		transition: background-color var(--transition-duration);
+	}
+
+	search button:hover {
+		background-color: var(--primary-light);
+	}
+
+	search button:active {
+		background-color: var(--primary-dark);
+	}
+</style>
