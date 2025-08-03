@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Capa_2" data-name="Capa 2" viewBox="0 0 46 55">
+  <defs>
+    <path id="reuse-0" d="M0 49h19v6H0z" class="cls-2"/>
+    <path id="reuse-1" d="M39 7A23 23 0 0 0 0 23v23h23A23 23 0 0 0 39 7Zm-4 17a9 9 0 1 1-13-13 9 9 0 0 1 13 13Z" class="cls-1"/>
+  </defs>
+  <defs>
+    <linearGradient id="Degradado_sin_nombre_45" x1="0" x2="19.1" y1="52" y2="52" data-name="Degradado sin nombre 45" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b9d6ec"/>
+      <stop offset=".3" stop-color="#accee8"/>
+      <stop offset=".8" stop-color="#8abade"/>
+      <stop offset="1" stop-color="#79b0da"/>
+    </linearGradient>
+    <style>
+      .cls-1{fill:#c6833a}.cls-2{fill:url(#Degradado_sin_nombre_45)}
+    </style>
+  </defs>
+  <g id="Capa_4" data-name="Capa 4">
+    <use xlink:href="#reuse-0" class="cls-2"/>
+    <use xlink:href="#reuse-1" class="cls-1"/>
+    <use xlink:href="#reuse-0" class="cls-2"/>
+    <use xlink:href="#reuse-1" class="cls-1"/>
+  </g>
+</svg>

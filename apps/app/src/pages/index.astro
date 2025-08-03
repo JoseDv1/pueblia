@@ -1,4 +1,5 @@
 ---
+import Navbar from "@/components/molecules/Navbar.astro";
 import Layout from "@/layouts/Layout.astro";
 import { isAuthenticated } from "@/lib/auth";
 
@@ -7,51 +8,12 @@ if (!authenticated) return Astro.redirect("/auth/login");
 ---
 
 <Layout title="Pueblia">
-	<nav>
-		<div>
-			<img src="/favicon.svg" alt="Logo" class="logo" />
-			<h1 class="font-baloo">Pueblia</h1>
-		</div>
+	<Navbar />
+	<section>
+		<!-- Searchbar -->
 
-		<ul>
-			<li><a href="/dashboard">Inicio</a></li>
-			<li><a href="/profile">Perfil</a></li>
-			<li><a href="/settings">Configuración</a></li>
-			<li><a href="/logout">Cerrar sesión</a></li>
-		</ul>
-	</nav>
+		<!-- Categories Circle -->
+	</section>
 </Layout>
 
-<style>
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0.5rem 1rem;
-		background-color: var(--primary);
-		color: white;
-	}
-
-	nav img.logo {
-		width: 40px;
-		height: 40px;
-	}
-
-	nav ul,
-	nav div {
-		display: flex;
-		gap: 1rem;
-		list-style: none;
-		align-items: center;
-	}
-
-	nav ul li a {
-		color: white;
-		text-decoration: none;
-
-		&:hover {
-			text-decoration: underline;
-			color: var(--secondary);
-		}
-	}
-</style>
+<style></style>

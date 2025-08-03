@@ -49,8 +49,10 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 					</span>
 				</div>
 			</label>
-			<Button variant="primary" transition:name="primary-button" type="submit"
-				>Iniciar Sesion</Button
+			<Button
+				variant="primary"
+				transition:name="primary-button"
+				type="submit">Iniciar Sesion</Button
 			>
 		</form>
 
@@ -98,11 +100,11 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 	async function login(username: string, password: string) {
 		const res = await fetch(`${API_URL}/api/v1/auth/login`, {
 			method: "POST",
-			credentials: "include", // Include cookies for session management
+			body: JSON.stringify({ email: username, password }),
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email: username, password }),
+			credentials: "include",
 		});
 
 		const data = await res.json();
