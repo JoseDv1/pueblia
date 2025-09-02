@@ -200,6 +200,40 @@ export async function toggleBussinesAsFav(bussinesId: string, userId: string, ad
 	});
 }
 
+export async function updateBussinesCoverImage(bussinesId: string, imagePath: string) {
+	return await prisma.business.update({
+		where: { id: bussinesId },
+		data: {
+			cover: imagePath
+		}
+	});
+}
+
+export async function uploadBussinesCoverImage(bussinesId: string, coverImage: File) {
+	// Validate media type
+	if (!coverImage || !["image/jpeg", "image/png", "image/webp"].includes(coverImage.type)) {
+		throw new Error("Invalid cover image. Only JPEG, PNG, and webp formats are allowed.");
+	}
+
+	// Create a folder for the cover images if it doesn't exist
+	const bussinesUploadDir = `${Bun.env.UPLOAD_DIRECTORY}/${bussinesId}`;
+	const fileNewName = `cover_${Date.now()}_${coverImage.name}`;
+	const filePath = `${bussinesUploadDir}/${fileNewName}.${coverImage.type.split("/")[1]}`;
+
+	// Save the file to the server
+	await Bun.write(filePath, await coverImage.arrayBuffer(), {
+		createPath: true,
+	});
+
+	// Update the business record with the new cover image URL/path
+	const updatedBusiness = await updateBussinesCoverImage(bussinesId, filePath);
+
+	return {
+		business: updatedBusiness,
+		filePath
+	};
+}
+
 
 // ----------- Orders -----------
 export async function getBussinesOrders(bussinesId: string) {

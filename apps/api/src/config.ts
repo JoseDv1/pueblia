@@ -1,7 +1,6 @@
 import type { CookieOptions } from "hono/utils/cookie";
 
 export const PORT = Bun.env.PORT ?? 3000;
-
 export const HASHING_OPTIONS = {
 	algorithm: "argon2id",
 	memoryCost: 65536, // 64 MB
@@ -38,6 +37,10 @@ export const COOKIE_OPTIONS: CookieOptions = {
 	secure: true,
 	httpOnly: true,
 	sameSite: "None",
+}
 
-
+export const UPLOAD_DIRECTORY = Bun.env.UPLOAD_DIRECTORY
+if (!UPLOAD_DIRECTORY) {
+	console.error("❌ UPLOAD_DIRECTORY is not set. Please configure it in your environment variables.");
+	throw new Error("UPLOAD_DIRECTORY is required for file uploads");
 }

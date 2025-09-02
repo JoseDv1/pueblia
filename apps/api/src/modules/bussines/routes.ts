@@ -2,7 +2,7 @@ import { JWTGuard } from "@/middleware/auth";
 import { zValidator } from "@/middleware/validator";
 import { Hono } from "hono";
 import { bussinesIdSchema, createBussinesSchema, updateBussinesSchema, bussinesListQuerySchema } from "./schema";
-import { blockBussines, changeOrderStatus, createBussines, getAdminsInBussines, getBussines, getBussinesById, getBussinesByUserId, getBussinesOrders, getBussinesReviews, modifyAdminInBussines, toggleBussinesAsFav, updateBussines } from "./services";
+import { blockBussines, changeOrderStatus, createBussines, getAdminsInBussines, getBussines, getBussinesById, getBussinesByUserId, getBussinesOrders, getBussinesReviews, modifyAdminInBussines, toggleBussinesAsFav, updateBussines, uploadBussinesCoverImage } from "./services";
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod/v4";
 import { OrderStatus, UserRole } from "@/db/prisma";
@@ -89,10 +89,35 @@ export const bussinesRouter = new Hono()
 			return ctx.json(updatedBussines, 200);
 		}
 	)
-	.patch("/:id/cover", JWTGuard(), async (_ctx) => {
-		// TODO: Implement cover image upload logic
-		throw new HTTPException(501, { message: "Cover image upload not implemented yet" });
-	})
+	.patch("/:id/cover", JWTGuard()
+		, zValidator("param", bussinesIdSchema)
+		, zValidator("form", z.object({
+			coverImage: z.instanceof(File, { message: "coverImage must be a file" })
+		}))
+		, async (ctx) => {
+			const { id } = ctx.req.valid("param");
+			const { coverImage } = ctx.req.valid("form") as { coverImage: File };
+			const { sub: userId, role } = ctx.get("jwtPayload");
+
+			//  Check if have  permissions
+			const bussines = await getAdminsInBussines(id);
+			if (!bussines)
+				throw new HTTPException(404, { message: "Business not found" });
+
+			const isAdmin = role === UserRole.ADMIN;
+			const isOwner = bussines.ownerId === userId;
+			const isAdminUser = bussines.AdminsUsers.some(admin => admin.id === userId);
+
+			if (!isOwner && !isAdmin && !isAdminUser)
+				throw new HTTPException(403, { message: "Forbidden: Only the owner, admin, or admin user can update this business" });
+
+			const result = await uploadBussinesCoverImage(id, coverImage);
+			return ctx.json({
+				message: "Cover image uploaded successfully",
+				business: result.business,
+				filePath: result.filePath
+			}, 200);
+		})
 	.get("/me", JWTGuard(), async (ctx) => {
 		const { sub: userId } = ctx.get("jwtPayload");
 		const bussines = await getBussinesByUserId(userId);
