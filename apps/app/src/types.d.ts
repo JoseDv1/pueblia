@@ -1,1 +1,1 @@
-export { BusinessCategory } from "../../../packages/db/generated/prisma/client"
+export { BusinessCategory, Services } from "../../../packages/db/generated/prisma/client"

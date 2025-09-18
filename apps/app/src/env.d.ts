@@ -4,6 +4,7 @@ interface Window {
 
 interface ImportMetaEnv {
 	readonly PUBLIC_API_BASE_URL: string;
+	readonly JWT_SECRET: string;
 }
 
 interface ImportMeta {

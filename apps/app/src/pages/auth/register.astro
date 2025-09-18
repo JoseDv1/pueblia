@@ -16,6 +16,8 @@ import EyeIcon from "@/assets/icons/eye.svg";
 			x-data="registerForm"
 			@submit.prevent="handleRegister"
 		>
+			<p x-show="error" class="error" x-text="error"></p>
+
 			<label transition:name="name-label">
 				<span>Nombre Completo:</span>
 				<input
@@ -105,8 +107,9 @@ import EyeIcon from "@/assets/icons/eye.svg";
 		</Button>
 
 		<p transition:name="switch-text">
-			¿Ya tienes una cuenta? <a href="/auth/login" transition:name="switch-link"
-				>Inicia Sesión</a
+			¿Ya tienes una cuenta? <a
+				href="/auth/login"
+				transition:name="switch-link">Inicia Sesión</a
 			>
 		</p>
 	</main>
@@ -117,11 +120,18 @@ import EyeIcon from "@/assets/icons/eye.svg";
 	import { API_URL } from "@/services/constants";
 	import { navigate } from "astro:transitions/client";
 
+	interface RegisterFormData {
+		showPassword: boolean;
+		showConfirmPassword: boolean;
+		error: string | null;
+		handleRegister(e: SubmitEvent): Promise<void>;
+	}
+
 	document.addEventListener("alpine:init", () => {
-		Alpine.data("registerForm", () => ({
+		Alpine.data<RegisterFormData, []>("registerForm", () => ({
 			showPassword: false,
 			showConfirmPassword: false,
-
+			error: null,
 			async handleRegister(e: SubmitEvent) {
 				e.preventDefault();
 				const form = e.target as HTMLFormElement;
@@ -136,8 +146,15 @@ import EyeIcon from "@/assets/icons/eye.svg";
 					username: string;
 				};
 
-				await register(data);
-				navigate("/")
+				try {
+					await register(data);
+					navigate("/");
+				} catch (error) {
+					this.error =
+						(error as Error).message || "Error al registrarse";
+				} finally {
+					form.reset();
+				}
 			},
 		}));
 	});
@@ -160,9 +177,8 @@ import EyeIcon from "@/assets/icons/eye.svg";
 
 		const resData = await res.json();
 		if (!res.ok) {
+			throw new Error(resData.error || "Error al registrarse");
 		}
-
-		console.log("Login successful", resData);
 		return resData;
 	}
 </script>

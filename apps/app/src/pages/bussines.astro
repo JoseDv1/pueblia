@@ -1,0 +1,22 @@
+---
+import { isAuthenticated } from "@/lib/auth";
+import Layout from "@/layouts/Layout.astro";
+import Navbar from "@/components/molecules/Navbar.astro";
+
+const user = await isAuthenticated(Astro);
+if (!user) return Astro.redirect("/auth/unauth");
+---
+
+<Layout title="Negocios">
+	<Navbar />
+	<header>
+		<!-- Filter -->
+
+		<!-- My Bussines -->
+		<a href="/bussines/me"> Mis negocios </a>
+	</header>
+
+	<main></main>
+</Layout>
+
+<style></style>

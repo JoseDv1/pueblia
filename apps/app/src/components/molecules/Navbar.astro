@@ -1,44 +1,55 @@
 ---
-import HamburguerMenuIcon from "@/assets/icons/hamburguer-menu.svg";
-import CloseIcon from "@/assets/icons/x-icon.svg";
 import Logo from "@/assets/icons/logo.svg";
+import IconHome from "@/assets/icons/home.svg";
+import IconProfile from "@/assets/icons/user.svg";
+import NavbarLink from "@/components/atoms/NavbarLink.astro";
+import BussinesIcon from "@/assets/icons/bussiness.svg";
 
 interface NavLink {
 	href: string;
 	label: string;
+	icon: any;
 }
 
 const navLinks: NavLink[] = [
-	{ href: "/", label: "Inicio" },
-	{ href: "/profile", label: "Perfil" },
+	{ href: "/bussines", label: "Negocios", icon: BussinesIcon },
+	{ href: "/profile", label: "Perfil", icon: IconProfile },
 ];
+
+// Split links into two groups for left and right alignment
+const leftLinks = navLinks.slice(0, Math.ceil(navLinks.length / 2));
+const rightLinks = navLinks.slice(Math.ceil(navLinks.length / 2));
 ---
 
 <nav>
-	<div>
-		<Logo width={48} height={48} />
-		<h1 class="font-baloo">Pueblia</h1>
-	</div>
+	<!-- Menu -->
+	<ul>
+		{
+			leftLinks.map((link) => (
+				<NavbarLink
+					href={link.href}
+					label={link.label}
+					icon={link.icon}
+				/>
+			))
+		}
+	</ul>
 
-	<input type="checkbox" name="menu-toggle" id="menu-toggle" />
-	<label for="menu-toggle" x-data="{ open: false }" @click="open = !open">
-		<template x-if="!open" x-transition>
-			<HamburguerMenuIcon />
-		</template>
-		<template x-if="open" x-transition>
-			<CloseIcon />
-		</template>
-	</label>
+	<main>
+		<a href="/">
+			<Logo width={48} height={48} />
+		</a>
+	</main>
 
 	<!-- Menu -->
 	<ul>
 		{
-			navLinks.map((link) => (
-				<li>
-					<a class="nav-link" href={link.href}>
-						{link.label}
-					</a>
-				</li>
+			rightLinks.map((link) => (
+				<NavbarLink
+					href={link.href}
+					label={link.label}
+					icon={link.icon}
+				/>
 			))
 		}
 	</ul>
@@ -46,88 +57,39 @@ const navLinks: NavLink[] = [
 
 <style>
 	nav {
-		display: flex;
+		display: inline-flex;
+		justify-content: center;
 		align-items: center;
-		justify-content: space-between;
-		padding: 0.5rem 1rem;
+		padding: var(--spacing-sm) var(--spacing-lg);
 		background-color: var(--primary);
-		color: var(--text-color);
-	}
-
-	nav img.logo {
-		width: 40px;
-		height: 40px;
-	}
-
-	nav div {
-		display: flex;
-		gap: 1rem;
-		list-style: none;
-		align-items: center;
-	}
-
-	nav ul {
-		display: flex;
-		flex-direction: column;
-		position: absolute;
-		top: 100%;
+		position: fixed;
+		bottom: 0;
 		left: 0;
 		right: 0;
-		background-color: var(--primary);
-		z-index: 1;
-		opacity: 0;
-		transform: translateY(-10px);
-		transition:
-			transform var(--transition-duration) ease-in-out,
-			opacity var(--transition-duration) ease-in-out;
-		pointer-events: none;
-
-		@media (min-width: 768px) {
-			display: flex;
-			flex-direction: row;
-			position: static;
-			background-color: transparent;
-			opacity: 1;
-			transform: translateY(0);
-			pointer-events: all;
-			gap: 1rem;
-		}
+		z-index: 100;
+		gap: var(--spacing-md);
 	}
 
-	nav:has(input:checked) ul {
-		opacity: 1;
-		transform: translateY(0);
-		pointer-events: all;
-	}
-
-	a.nav-link {
-		display: block;
-		padding: 1rem;
-		color: var(--text-color);
-		text-decoration: none;
+	nav main {
+		aspect-ratio: 1 / 1;
+		background-color: var(--primary-dark);
+		border-radius: 50%;
+		transition: transform var(--transition-duration);
+		box-shadow: 0 6px 20px var(--shadow-color);
+		z-index: 101;
+		padding: 0.5rem;
 
 		&:hover {
-			text-decoration: underline;
-			color: var(--secondary);
-			background-color: var(--primary-dark);
+			transform: scale(1.1) translateY(-2px);
 		}
 	}
 
-	label[for="menu-toggle"] {
-		cursor: pointer;
-
-		@media (min-width: 768px) {
-			display: none;
-		}
-	}
-
-	input[type="checkbox"] {
-		display: none;
-	}
-
-	label svg {
-		fill: var(--text-color);
-		width: 24px;
-		aspect-ratio: 1;
+	ul {
+		display: flex;
+		flex: 1;
+		justify-content: space-around;
+		list-style: none;
+		padding: 0;
+		margin: 0;
 	}
 </style>

@@ -1,0 +1,739 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCategories } from "@/services/categories";
+
+// Obtener categorías para el formulario
+const categories = await getCategories();
+---
+
+<Layout title="Crear Nuevo Negocio">
+	<main class="container">
+		<header class="page-header">
+			<h1>Crear Nuevo Negocio</h1>
+			<p>Completa la información básica para comenzar</p>
+		</header>
+
+		<div x-data="businessForm()">
+			<form
+				@submit.prevent="submitForm"
+				class="business-form"
+				x-show="!showSuccess"
+			>
+				<div class="form-group">
+					<label for="name">Nombre del Negocio *</label>
+					<input
+						type="text"
+						id="name"
+						x-model="form.name"
+						required
+						placeholder="Ej: Mi Restaurante"
+						autocomplete="organization"
+						:class="{ 'error': errors.name }"
+					/>
+					<span class="error-message" x-text="errors.name"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="description">Descripción</label>
+					<textarea
+						id="description"
+						x-model="form.description"
+						rows="4"
+						placeholder="Describe tu negocio, servicios y lo que lo hace especial..."
+					></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="businessCategoryId">Categoría *</label>
+					<select
+						id="businessCategoryId"
+						x-model="form.businessCategoryId"
+						required
+						:class="{ 'error': errors.category }"
+					>
+						<option value="">Selecciona una categoría</option>
+						{
+							categories.map((category) => (
+								<option value={category.id}>
+									{category.name}
+								</option>
+							))
+						}
+					</select>
+					<span class="error-message" x-text="errors.category"></span>
+				</div>
+
+				<!-- Sección de imágenes -->
+				<div class="images-section">
+					<h3>Imágenes del Negocio</h3>
+
+					<div class="form-group">
+						<label for="logo">Logo del Negocio</label>
+						<div class="file-upload-container">
+							<input
+								type="file"
+								id="logo"
+								@change="handleFileSelect($event, 'logo')"
+								accept="image/jpeg,image/png,image/webp"
+								class="file-input"
+								x-ref="logoInput"
+							/>
+							<div
+								class="file-upload-area"
+								@click="$refs.logoInput.click()"
+								@dragover.prevent="dragOver($event, 'logo')"
+								@dragleave.prevent="dragLeave('logo')"
+								@drop.prevent="handleDrop($event, 'logo')"
+								:class="{ 'drag-over': dragStates.logo }"
+								x-show="!files.logo.preview"
+							>
+								<div class="upload-content">
+									<svg
+										width="48"
+										height="48"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+										></path>
+									</svg>
+									<p>
+										<strong>Haz clic para subir</strong> o arrastra
+										el logo aquí
+									</p>
+									<small>PNG, JPG, WebP hasta 5MB</small>
+								</div>
+							</div>
+							<div
+								class="file-preview"
+								x-show="files.logo.preview"
+							>
+								<img
+									:src="files.logo.preview"
+									alt="Vista previa del logo"
+								/>
+								<button
+									type="button"
+									class="remove-file"
+									@click="removeFile('logo')">×</button
+								>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="cover">Imagen de Portada</label>
+						<div class="file-upload-container">
+							<input
+								type="file"
+								id="cover"
+								@change="handleFileSelect($event, 'cover')"
+								accept="image/jpeg,image/png,image/webp"
+								class="file-input"
+								x-ref="coverInput"
+							/>
+							<div
+								class="file-upload-area"
+								@click="$refs.coverInput.click()"
+								@dragover.prevent="dragOver($event, 'cover')"
+								@dragleave.prevent="dragLeave('cover')"
+								@drop.prevent="handleDrop($event, 'cover')"
+								:class="{ 'drag-over': dragStates.cover }"
+								x-show="!files.cover.preview"
+							>
+								<div class="upload-content">
+									<svg
+										width="48"
+										height="48"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+										></path>
+									</svg>
+									<p>
+										<strong>Haz clic para subir</strong> o arrastra
+										la portada aquí
+									</p>
+									<small>PNG, JPG, WebP hasta 10MB</small>
+								</div>
+							</div>
+							<div
+								class="file-preview"
+								x-show="files.cover.preview"
+							>
+								<img
+									:src="files.cover.preview"
+									alt="Vista previa de la portada"
+								/>
+								<button
+									type="button"
+									class="remove-file"
+									@click="removeFile('cover')">×</button
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="phone">Teléfono</label>
+					<input
+						type="tel"
+						id="phone"
+						x-model="form.phone"
+						placeholder="+1 234 567 8900"
+						autocomplete="tel"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="website">Sitio Web</label>
+					<input
+						type="url"
+						id="website"
+						x-model="form.website"
+						placeholder="https://mi-negocio.com"
+						autocomplete="url"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="location">Ubicación</label>
+					<input
+						type="text"
+						id="location"
+						x-model="form.location"
+						placeholder="Dirección completa o enlace de Google Maps"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="tags">Etiquetas</label>
+					<input
+						type="text"
+						id="tags"
+						x-model="form.tags"
+						placeholder="comida, delivery, 24h (separadas por comas)"
+					/>
+					<small class="help-text"
+						>Separa las etiquetas con comas</small
+					>
+				</div>
+
+				<div class="form-actions">
+					<button
+						type="button"
+						class="btn btn-secondary"
+						@click="history.back()"
+					>
+						Cancelar
+					</button>
+					<button
+						type="submit"
+						class="btn btn-primary"
+						:disabled="loading"
+					>
+						<span x-show="!loading">Crear Negocio</span>
+						<span x-show="loading">Creando...</span>
+					</button>
+				</div>
+			</form>
+
+			<div class="success-message" x-show="showSuccess">
+				<h3>¡Negocio creado exitosamente!</h3>
+				<p>Ya puedes comenzar a gestionar tu negocio.</p>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	import { createBusiness, uploadBusinessCover } from "@/services/businesses";
+	import Alpine from "alpinejs";
+
+	document.addEventListener("alpine:init", () => {
+		Alpine.data("businessForm", () => ({
+			// Estado del formulario
+			form: {
+				name: "",
+				description: "",
+				businessCategoryId: "",
+				phone: "",
+				website: "",
+				location: "",
+				tags: "",
+			},
+
+			// Estado de archivos
+			files: {
+				logo: {
+					file: null,
+					preview: "",
+				},
+				cover: {
+					file: null,
+					preview: "",
+				},
+			},
+
+			// Estados de drag and drop
+			dragStates: {
+				logo: false,
+				cover: false,
+			},
+
+			// Estados de UI
+			loading: false,
+			showSuccess: false,
+			errors: {
+				name: "",
+				category: "",
+			},
+
+			// Validación
+			validateForm() {
+				this.errors = { name: "", category: "" };
+				let isValid = true;
+
+				if (!this.form.name.trim()) {
+					this.errors.name = "El nombre es requerido";
+					isValid = false;
+				}
+
+				if (!this.form.businessCategoryId) {
+					this.errors.category = "La categoría es requerida";
+					isValid = false;
+				}
+
+				return isValid;
+			},
+
+			// Manejo de archivos
+			handleFileSelect(event, type) {
+				const file = event.target.files[0];
+				if (file) {
+					this.processFile(file, type);
+				}
+			},
+
+			handleDrop(event, type) {
+				this.dragStates[type] = false;
+				const files = event.dataTransfer.files;
+				if (files.length > 0) {
+					this.processFile(files[0], type);
+				}
+			},
+
+			processFile(file, type) {
+				// Validar tamaño
+				const maxSize =
+					type === "logo" ? 5 * 1024 * 1024 : 10 * 1024 * 1024; // 5MB logo, 10MB cover
+				if (file.size > maxSize) {
+					alert(
+						`El archivo es muy grande. Máximo ${maxSize / (1024 * 1024)}MB`,
+					);
+					return;
+				}
+
+				// Validar tipo
+				if (
+					!["image/jpeg", "image/png", "image/webp"].includes(
+						file.type,
+					)
+				) {
+					alert("Solo se permiten archivos PNG, JPG y WebP");
+					return;
+				}
+
+				// Guardar archivo y crear preview
+				this.files[type].file = file;
+
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					this.files[type].preview = e.target.result;
+				};
+				reader.readAsDataURL(file);
+			},
+
+			removeFile(type) {
+				this.files[type] = { file: null, preview: "" };
+				// Limpiar el input
+				const input = this.$refs[type + "Input"];
+				if (input) input.value = "";
+			},
+
+			dragOver(event, type) {
+				this.dragStates[type] = true;
+			},
+
+			dragLeave(type) {
+				this.dragStates[type] = false;
+			},
+
+			// Envío del formulario
+			async submitForm() {
+				if (!this.validateForm()) {
+					return;
+				}
+
+				this.loading = true;
+
+				try {
+					// Obtener token
+					const token = localStorage.getItem("authToken") || "";
+					if (!token) {
+						throw new Error(
+							"Debes iniciar sesión para crear un negocio",
+						);
+					}
+
+					// 1. Crear negocio básico
+					const business = await createBusiness(
+						{ name: this.form.name.trim() },
+						token,
+					);
+
+					// 2. Subir imagen de portada si existe
+					if (this.files.cover.file) {
+						await uploadBusinessCover(
+							business.id,
+							this.files.cover.file,
+							token,
+						);
+					}
+
+					// 3. TODO: Actualizar datos adicionales y logo
+					const additionalData = {};
+
+					if (this.form.description?.trim())
+						additionalData.description =
+							this.form.description.trim();
+					if (this.form.businessCategoryId)
+						additionalData.businessCategoryId =
+							this.form.businessCategoryId;
+					if (this.form.phone?.trim())
+						additionalData.phone = this.form.phone.trim();
+					if (this.form.website?.trim())
+						additionalData.website = this.form.website.trim();
+					if (this.form.location?.trim())
+						additionalData.location = this.form.location.trim();
+					if (this.form.tags?.trim()) {
+						additionalData.tags = this.form.tags
+							.split(",")
+							.map((tag) => tag.trim())
+							.filter(Boolean);
+					}
+
+					if (Object.keys(additionalData).length > 0) {
+						console.log(
+							"Datos adicionales para actualizar:",
+							additionalData,
+						);
+					}
+
+					// Mostrar éxito
+					this.showSuccess = true;
+
+					// Redirigir después de 2 segundos
+					setTimeout(() => {
+						window.location.href = `/bussines/${business.id}`;
+					}, 2000);
+				} catch (error) {
+					console.error("Error creating business:", error);
+					alert(
+						error instanceof Error
+							? error.message
+							: "Error al crear el negocio",
+					);
+				} finally {
+					this.loading = false;
+				}
+			},
+		}));
+	});
+</script>
+
+<style>
+	.container {
+		max-width: 600px;
+		margin: 0 auto;
+		padding: var(--spacing-lg);
+		padding-bottom: 120px; /* Espacio para navbar */
+	}
+
+	.page-header {
+		text-align: center;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.page-header h1 {
+		color: var(--text-color);
+		margin-bottom: var(--spacing-sm);
+		font-size: 2rem;
+	}
+
+	.page-header p {
+		color: var(--text-muted);
+		font-size: 1.1rem;
+	}
+
+	.business-form {
+		background: var(--top-color);
+		border-radius: var(--border-radius);
+		padding: var(--spacing-xl);
+		box-shadow: 0 4px 20px var(--shadow-color);
+	}
+
+	.form-group {
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.form-group label {
+		display: block;
+		margin-bottom: var(--spacing-xs);
+		font-weight: 600;
+		color: var(--text-color);
+	}
+
+	.form-group input,
+	.form-group textarea,
+	.form-group select {
+		width: 100%;
+		padding: var(--spacing-md);
+		border: 2px solid var(--border-color);
+		border-radius: var(--border-radius);
+		font-size: 1rem;
+		transition: border-color var(--transition-duration);
+		background: var(--top-color);
+		color: var(--text-color);
+	}
+
+	.form-group input:focus,
+	.form-group textarea:focus,
+	.form-group select:focus {
+		outline: none;
+		border-color: var(--primary);
+		box-shadow: 0 0 0 3px hsla(var(--primary-hsl), 0.1);
+	}
+
+	.form-group input.error,
+	.form-group select.error {
+		border-color: var(--error);
+	}
+
+	.error-message {
+		display: block;
+		color: var(--error);
+		font-size: 0.875rem;
+		margin-top: var(--spacing-xs);
+		min-height: 1.2em;
+	}
+
+	.help-text {
+		display: block;
+		color: var(--text-muted);
+		font-size: 0.875rem;
+		margin-top: var(--spacing-xs);
+	}
+
+	.form-actions {
+		display: flex;
+		gap: var(--spacing-md);
+		justify-content: flex-end;
+		margin-top: var(--spacing-xl);
+	}
+
+	.btn {
+		padding: var(--spacing-md) var(--spacing-lg);
+		border: none;
+		border-radius: var(--border-radius);
+		font-size: 1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all var(--transition-duration);
+		text-decoration: none;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+	}
+
+	.btn-primary {
+		background: var(--primary);
+		color: white;
+	}
+
+	.btn-primary:hover:not(:disabled) {
+		background: var(--primary-light);
+		transform: translateY(-2px);
+	}
+
+	.btn-primary:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	.btn-secondary {
+		background: var(--neutral);
+		color: var(--text-color);
+	}
+
+	.btn-secondary:hover {
+		background: var(--neutral-dark);
+	}
+
+	.success-message {
+		background: var(--success-light);
+		color: var(--success-dark);
+		padding: var(--spacing-xl);
+		border-radius: var(--border-radius);
+		text-align: center;
+		border: 2px solid var(--success);
+	}
+
+	.success-message h3 {
+		margin-bottom: var(--spacing-sm);
+		color: var(--success-dark);
+	}
+
+	/* File Upload Styles */
+	.images-section {
+		margin: var(--spacing-xl) 0;
+		padding: var(--spacing-lg);
+		background: var(--middle-color);
+		border-radius: var(--border-radius);
+		border: 1px solid var(--border-color);
+	}
+
+	.images-section h3 {
+		margin-bottom: var(--spacing-lg);
+		color: var(--text-color);
+		font-size: 1.2rem;
+	}
+
+	.file-upload-container {
+		position: relative;
+	}
+
+	.file-input {
+		display: none;
+	}
+
+	.file-upload-area {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 150px;
+		border: 2px dashed var(--border-color);
+		border-radius: var(--border-radius);
+		background: var(--top-color);
+		cursor: pointer;
+		transition: all var(--transition-duration);
+		text-align: center;
+		padding: var(--spacing-lg);
+	}
+
+	.file-upload-area:hover {
+		border-color: var(--primary);
+		background: var(--primary-light);
+	}
+
+	.file-upload-area.drag-over {
+		border-color: var(--primary);
+		background: var(--primary-light);
+		transform: scale(1.02);
+	}
+
+	.upload-content svg {
+		color: var(--text-muted);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.upload-content p {
+		margin-bottom: var(--spacing-xs);
+		color: var(--text-color);
+	}
+
+	.upload-content small {
+		color: var(--text-muted);
+	}
+
+	.file-preview {
+		position: relative;
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		max-width: 300px;
+		margin: 0 auto;
+	}
+
+	.file-preview img {
+		width: 100%;
+		height: auto;
+		max-height: 200px;
+		object-fit: cover;
+		border-radius: var(--border-radius);
+	}
+
+	.remove-file {
+		position: absolute;
+		top: var(--spacing-xs);
+		right: var(--spacing-xs);
+		background: var(--error);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+		font-size: 1.2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background var(--transition-duration);
+	}
+
+	.remove-file:hover {
+		background: var(--error-dark);
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.container {
+			padding: var(--spacing-md);
+		}
+
+		.business-form {
+			padding: var(--spacing-lg);
+		}
+
+		.images-section {
+			padding: var(--spacing-md);
+		}
+
+		.file-upload-area {
+			min-height: 120px;
+			padding: var(--spacing-md);
+		}
+
+		.form-actions {
+			flex-direction: column;
+		}
+
+		.btn {
+			width: 100%;
+			justify-content: center;
+		}
+	}
+</style>

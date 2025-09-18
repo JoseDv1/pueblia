@@ -4,19 +4,11 @@ import Layout from "@/layouts/Layout.astro";
 import Searchbar from "@/components/molecules/Searchbar.astro";
 import { isAuthenticated } from "@/lib/auth";
 import CategoriesHeader from "@/components/molecules/CategoriesHeader.astro";
-import type { BusinessCategory } from "@/types";
-import { API_URL } from "@/services/constants";
-
-const authenticated = isAuthenticated(Astro);
-if (!authenticated) return Astro.redirect("/auth/login");
-
-async function getCategories(): Promise<BusinessCategory[]> {
-	const res = await fetch(`${API_URL}/api/v1/categories`);
-	const data = await res.json();
-	return data;
-}
+import { getCategories } from "@/services/categories";
+import { getServices } from "@/services/services";
 
 const categories = await getCategories();
+const services = await getServices(); // For displaying offers
 ---
 
 <Layout title="Pueblia">
@@ -25,6 +17,10 @@ const categories = await getCategories();
 		<Searchbar />
 		<CategoriesHeader categories={categories} />
 	</header>
+
+	<main>
+		<!-- Offers Cards -->
+	</main>
 </Layout>
 
 <style>

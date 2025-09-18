@@ -1,0 +1,78 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Logo from "@/assets/icons/logo.svg";
+---
+
+<Layout title="No Autenticado">
+	<main>
+		<Logo width={72} height={72} />
+
+		<h1>Inicia Sesion o registrate para ver esta pagina</h1>
+		<p>
+			Necesitas estar autenticado para acceder a este contenido, por favor
+			inicia sesion o registrate haciendo click en los enlaces de abajo.
+		</p>
+
+		<a href="/auth/login">Iniciar Sesion</a>
+		<br />
+		<a href="/auth/register">Registrarse</a>
+	</main>
+</Layout>
+
+<style>
+	main {
+		max-width: 600px;
+		margin: 0 auto;
+		padding: var(--spacing-xxl) var(--spacing-md);
+		text-align: center;
+		background-color: var(--top-color);
+		border-radius: var(--border-radius);
+		box-shadow: 0 4px 6px var(--shadow-color);
+		margin-top: var(--spacing-xxxl);
+	}
+
+	h1 {
+		color: var(--text-color);
+		margin-block: var(--spacing-lg);
+		font-size: 2rem;
+		font-weight: 600;
+	}
+
+	p {
+		color: var(--text-muted);
+		margin-block: var(--spacing-xl);
+		line-height: 1.6;
+		font-size: 1.1rem;
+	}
+
+	a {
+		display: inline-block;
+		color: var(--top-color);
+		padding: var(--spacing-md) var(--spacing-xl);
+		border-radius: var(--border-radius);
+		text-decoration: none;
+		margin: var(--spacing-sm);
+		font-weight: 500;
+		transition: background-color var(--transition-duration);
+
+		&:hover {
+			background-color: var(--primary-dark);
+		}
+
+		&:first-of-type {
+			background-color: var(--primary);
+		}
+
+		&:last-of-type {
+			background-color: var(--secondary);
+
+			&:hover {
+				background-color: var(--secondary-dark);
+			}
+		}
+	}
+
+	br {
+		display: none;
+	}
+</style>

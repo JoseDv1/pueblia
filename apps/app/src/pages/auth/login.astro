@@ -17,6 +17,15 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 			x-data="loginForm"
 			@submit.prevent="handleLogin"
 		>
+			<p
+				x-show="error"
+				class="error"
+				x-text="error"
+				x-transition
+				transition:name="error-message"
+			>
+			</p>
+
 			<label transition:name="email-label">
 				<span>Email: </span>
 				<input
@@ -44,6 +53,14 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 						<EyeIcon
 							width={24}
 							height={24}
+							x-show="!showPassword"
+							@click="showPassword = !showPassword"
+						/>
+
+						<EyeClosedIcon
+							width={24}
+							height={24}
+							x-show="showPassword"
 							@click="showPassword = !showPassword"
 						/>
 					</span>
@@ -77,9 +94,16 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 	import { API_URL } from "@/services/constants";
 	import { navigate } from "astro:transitions/client";
 
+	interface LoginFormData {
+		showPassword: boolean;
+		error: string | null;
+		handleLogin(e: SubmitEvent): Promise<void>;
+	}
+
 	document.addEventListener("alpine:init", () => {
-		Alpine.data("loginForm", () => ({
+		Alpine.data<LoginFormData, []>("loginForm", () => ({
 			showPassword: false,
+			error: null,
 			async handleLogin(e: SubmitEvent) {
 				e.preventDefault();
 				const form = e.target as HTMLFormElement;
@@ -91,8 +115,14 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 					password: string;
 				};
 
-				await login(data.email, data.password);
-				navigate("/");
+				try {
+					await login(data.email, data.password);
+					navigate("/");
+				} catch (error: any) {
+					this.error = error.message || "Error al iniciar sesión";
+				} finally {
+					form.reset();
+				}
 			},
 		}));
 	});
@@ -106,13 +136,12 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 			},
 			credentials: "include",
 		});
-
 		const data = await res.json();
+
 		if (!res.ok) {
-			throw new Error(data.message || "Error al iniciar sesión");
+			throw new Error(data.error);
 		}
 
-		console.log("Login successful", data);
 		return data;
 	}
 </script>
@@ -206,5 +235,12 @@ import EyeClosedIcon from "@/assets/icons/eye-closed.svg";
 		position: relative;
 		display: flex;
 		align-items: center;
+	}
+
+	.error {
+		color: var(--error);
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 0.5rem;
 	}
 </style>
