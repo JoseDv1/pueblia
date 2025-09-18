@@ -6,7 +6,7 @@ import { blockBussines, changeOrderStatus, createBussines, getAdminsInBussines, 
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod/v4";
 import { OrderStatus, UserRole } from "@/db/prisma";
-import { servicesRouter } from "../services/routes";
+import { bussinesServicesRouter } from "../services/routes";
 
 export const bussinesRouter = new Hono()
 	.get("/",
@@ -16,6 +16,11 @@ export const bussinesRouter = new Hono()
 			const result = await getBussines(queryParams);
 			return ctx.json(result, 200);
 		})
+	.get("/me", JWTGuard(), async (ctx) => {
+		const { sub: userId } = ctx.get("jwtPayload");
+		const bussines = await getBussinesByUserId(userId);
+		return ctx.json(bussines, 200);
+	})
 	.get("/:id",
 		zValidator("param", bussinesIdSchema),
 		async (ctx) => {
@@ -118,12 +123,8 @@ export const bussinesRouter = new Hono()
 				filePath: result.filePath
 			}, 200);
 		})
-	.get("/me", JWTGuard(), async (ctx) => {
-		const { sub: userId } = ctx.get("jwtPayload");
-		const bussines = await getBussinesByUserId(userId);
-		return ctx.json(bussines, 200);
 
-	})
+
 	.delete("/:id",
 		JWTGuard(),
 		zValidator("param", bussinesIdSchema),
@@ -205,7 +206,7 @@ export const bussinesRouter = new Hono()
 			return ctx.json(updatedBussines, 200);
 		})
 	// ----  Services/Offers management routes ----
-	.route("/", servicesRouter)
+	.route("/", bussinesServicesRouter)
 	// ------- Orders management routes -------
 	.get("/:id/orders",
 		JWTGuard(),

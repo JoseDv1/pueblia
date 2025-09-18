@@ -36,7 +36,7 @@ export const COOKIES = {
 export const COOKIE_OPTIONS: CookieOptions = {
 	secure: true,
 	httpOnly: true,
-	sameSite: "None",
+	sameSite: "Lax",
 }
 
 export const UPLOAD_DIRECTORY = Bun.env.UPLOAD_DIRECTORY
